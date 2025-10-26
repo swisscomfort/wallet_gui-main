@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet GUI – Ausführliche interaktive Betriebsanleitung</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    color: #e0e0e0;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(42, 42, 42, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    color: #4fc3f7;
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+h2 {
+    color: #81c784;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #4fc3f7;
+}
+
+h3 {
+    color: #ffb74d;
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.nav {
+    background: #333;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 30px;
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+}
+
+.nav h3 {
+    margin-top: 0;
+    color: #4fc3f7;
+    font-size: 18px;
+}
+
+.nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nav li {
+    display: inline-block;
+}
+
+.nav a {
+    color: #4fc3f7;
+    text-decoration: none;
+    padding: 8px 15px;
+    background: #444;
+    border-radius: 5px;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.nav a:hover {
+    background: #4fc3f7;
+    color: #222;
+    transform: translateY(-2px);
+}
+
+.box {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+    border: 1px solid #4fc3f7;
+    border-left: 5px solid #4fc3f7;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+.warning {
+    background: linear-gradient(135deg, #3a2a1a 0%, #4a3a2a 100%);
+    border-color: #ff9800;
+    border-left-color: #ff9800;
+}
+
+.success {
+    background: linear-gradient(135deg, #1a3a2a 0%, #2a4a3a 100%);
+    border-color: #4caf50;
+    border-left-color: #4caf50;
+}
+
+.info {
+    background: linear-gradient(135deg, #1a2a3a 0%, #2a3a4a 100%);
+    border-color: #2196f3;
+    border-left-color: #2196f3;
+}
+
+.step {
+    background: linear-gradient(135deg, #2a1a3a 0%, #3a2a4a 100%);
+    border-color: #9c27b0;
+    border-left-color: #9c27b0;
+    position: relative;
+    padding-left: 60px;
+}
+
+.step-number {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 35px;
+    height: 35px;
+    background: #9c27b0;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+code {
+    background: #1a1a1a;
+    color: #4fc3f7;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+pre {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    overflow-x: auto;
+    color: #e0e0e0;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+ul, ol {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+li {
+    margin: 8px 0;
+}
+
+strong {
+    color: #ffb74d;
+}
+
+.button-demo {
+    display: inline-block;
+    background: #4fc3f7;
+    color: #222;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 5px;
+    cursor: help;
+    transition: all 0.3s;
+}
+
+.button-demo:hover {
+    background: #81c784;
+    transform: scale(1.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th {
+    background: #4fc3f7;
+    color: #222;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #444;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background: #333;
+}
+
+.interactive-section {
+    margin: 20px 0;
+}
+
+.collapsible {
+    background: #444;
+    color: #4fc3f7;
+    cursor: pointer;
+    padding: 15px;
+    border: none;
+    text-align: left;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: all 0.3s;
+}
+
+.collapsible:hover {
+    background: #555;
+}
+
+.collapsible.active {
+    background: #4fc3f7;
+    color: #222;
+}
+
+.collapsible:after {
+    content: ' ▼';
+    float: right;
+    transition: transform 0.3s;
+}
+
+.collapsible.active:after {
+    transform: rotate(-180deg);
+}
+
+.content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #333;
+    border-radius: 0 0 8px 8px;
+}
+
+.content > div {
+    padding: 15px;
+}
+
+.shortcut {
+    display: inline-block;
+    background: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #777;
+    font-family: monospace;
+    font-size: 12px;
+    margin: 0 3px;
+}
+
+.workflow-diagram {
+    background: #2a2a2a;
+    border: 2px solid #4fc3f7;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.workflow-step {
+    display: inline-block;
+    background: #444;
+    padding: 15px 25px;
+    margin: 10px;
+    border-radius: 8px;
+    border: 2px solid #4fc3f7;
+    position: relative;
+}
+
+.workflow-arrow {
+    display: inline-block;
+    color: #4fc3f7;
+    font-size: 24px;
+    margin: 0 10px;
+}
+
+@media print {
+    body { background: white; color: black; }
+    .container { box-shadow: none; }
+    .nav { position: static; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🔐 Wallet GUI – Ausführliche Betriebsanleitung</h1>
+<p class="subtitle">Interaktiver Leitfaden für die Wallet-Scanner-Anwendung</p>
+
+<nav class="nav">
+    <h3>📑 Schnellnavigation</h3>
+    <ul>
+        <li><a href="#overview">Übersicht</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#quick-start">Schnellstart</a></li>
+        <li><a href="#interface">Oberfläche</a></li>
+        <li><a href="#workflow">Arbeitsablauf</a></li>
+        <li><a href="#options">Optionen</a></li>
+        <li><a href="#results">Ergebnisse</a></li>
+        <li><a href="#advanced">Erweitert</a></li>
+        <li><a href="#troubleshooting">Fehlerbehebung</a></li>
+        <li><a href="#faq">FAQ</a></li>
+    </ul>
+</nav>
+
+<!-- ÜBERSICHT -->
+<section id="overview">
+    <h2>📋 Übersicht</h2>
+    
+    <div class="box info">
+        <h3>Was ist die Wallet GUI?</h3>
+        <p>Die <strong>Wallet GUI</strong> ist eine grafische Benutzeroberfläche zum Scannen von Festplatten, Ordnern, Images und Geräten nach Kryptowährungs-Wallets und zugehörigen Daten.</p>
+        
+        <p><strong>Hauptfunktionen:</strong></p>
+        <ul>
+            <li>🔍 Durchsuchen von Dateisystemen nach Wallet-Dateien</li>
+            <li>💾 Unterstützung für verschiedene Formate (wallet.dat, Electrum, MetaMask, etc.)</li>
+            <li>🔐 Erkennung von Mnemonics, Seeds und Private Keys</li>
+            <li>📦 Auto-Mount für Images und Devices</li>
+            <li>📊 Echtzeit-Monitoring und Ergebnisfilterung</li>
+            <li>💼 Export-Funktionen für gefundene Treffer</li>
+        </ul>
+    </div>
+
+    <div class="box success">
+        <h3>🎯 Unterstützte Wallet-Typen</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Wallet-Typ</th>
+                    <th>Erkennungsmuster</th>
+                    <th>Beschreibung</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Bitcoin Core</strong></td>
+                    <td><code>wallet.dat</code></td>
+                    <td>Standard Bitcoin-Wallet-Datei</td>
+                </tr>
+                <tr>
+                    <td><strong>Electrum</strong></td>
+                    <td><code>default_wallet, *.electrum</code></td>
+                    <td>Electrum Wallet-Dateien</td>
+                </tr>
+                <tr>
+                    <td><strong>MetaMask</strong></td>
+                    <td><code>metamask, vault</code></td>
+                    <td>MetaMask Browser-Extension</td>
+                </tr>
+                <tr>
+                    <td><strong>Mnemonics</strong></td>
+                    <td><code>12/24 Wörter</code></td>
+                    <td>BIP39 Seed-Phrasen</td>
+                </tr>
+                <tr>
+                    <td><strong>Keys</strong></td>
+                    <td><code>xpub, xprv, WIF</code></td>
+                    <td>Erweiterte Public/Private Keys</td>
+                </tr>
+                <tr>
+                    <td><strong>Adressen</strong></td>
+                    <td><code>bc1..., 0x...</code></td>
+                    <td>Bitcoin/Ethereum-Adressen</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- INSTALLATION -->
+<section id="installation">
+    <h2>⚙️ Installation & Systemvoraussetzungen</h2>
+    
+    <div class="box warning">
+        <h3>📦 Erforderliche Pakete</h3>
+        <pre><code># Debian/Ubuntu
+sudo apt install python3 python3-pyqt6 kdialog p7zip p7zip-plugins sleuthkit ntfs-3g
+
+# Arch Linux
+sudo pacman -S python python-pyqt6 kdialog p7zip sleuthkit ntfs-3g
+
+# Fedora
+sudo dnf install python3 python3-qt6 kdialog p7zip sleuthkit ntfs-3g</code></pre>
+    </div>
+
+    <div class="box">
+        <h3>🚀 Wallet GUI installieren</h3>
+        <pre><code># Im Projektverzeichnis:
+bash install_wallet_gui.sh
+
+# Danach starten mit:
+wallet-gui
+
+# Oder direkt:
+python3 ~/.local/share/wallet-gui/wallet_gui.py</code></pre>
+    </div>
+</section>
+
+<!-- SCHNELLSTART -->
+<section id="quick-start">
+    <h2>⚡ Schnellstart-Anleitung</h2>
+    
+    <div class="workflow-diagram">
+        <div class="workflow-step">1. ROOT wählen</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-step">2. Ziele hinzufügen</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-step">3. Optionen setzen</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-step">4. Scan starten</div>
+        <span class="workflow-arrow">→</span>
+        <div class="workflow-step">5. Ergebnisse prüfen</div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">1</div>
+        <h3>ROOT-Verzeichnis festlegen</h3>
+        <p>Das ROOT-Verzeichnis ist Ihr Arbeitsordner, in dem alle Logs, Mounts und Staging-Bereiche erstellt werden.</p>
+        <ul>
+            <li>Klicken Sie auf <span class="button-demo">ROOT wählen…</span></li>
+            <li>Wählen Sie einen Ordner mit ausreichend Speicherplatz (empfohlen: externe Festplatte)</li>
+            <li>Standard: <code>/run/media/emil/DATEN</code></li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <div class="step-number">2</div>
+        <h3>Scan-Ziele hinzufügen</h3>
+        <p>Legen Sie fest, welche Ordner, Dateien oder Geräte durchsucht werden sollen:</p>
+        <ul>
+            <li><span class="button-demo">Ordner hinzufügen</span> – Verzeichnis zum Durchsuchen</li>
+            <li><span class="button-demo">Datei/Abbild hinzufügen</span> – Image-Dateien (.img, .dd, .vdi, etc.)</li>
+            <li><span class="button-demo">Device (/dev/…) hinzufügen</span> – Physische Geräte/Partitionen</li>
+        </ul>
+        <p><strong>Tipp:</strong> Sie können mehrere Ziele gleichzeitig hinzufügen!</p>
+    </div>
+
+    <div class="step">
+        <div class="step-number">3</div>
+        <h3>Scan-Optionen konfigurieren</h3>
+        <p>Passen Sie das Scan-Verhalten an Ihre Bedürfnisse an (siehe Details unter "Optionen")</p>
+    </div>
+
+    <div class="step">
+        <div class="step-number">4</div>
+        <h3>Scan starten</h3>
+        <p>Klicken Sie auf <span class="button-demo">Scan starten</span> und beobachten Sie den Fortschritt im Live-Log.</p>
+    </div>
+
+    <div class="step">
+        <div class="step-number">5</div>
+        <h3>Ergebnisse auswerten</h3>
+        <p>Wechseln Sie zwischen den Tabs, um die gefundenen Wallets und Daten zu analysieren.</p>
+    </div>
+</section>
+
+<!-- OBERFLÄCHE -->
+<section id="interface">
+    <h2>🖥️ Oberfläche im Detail</h2>
+
+    <div class="interactive-section">
+        <button class="collapsible">🔧 Hauptsteuerung (obere Bereiche)</button>
+        <div class="content">
+            <div>
+                <h3>ROOT & Scanner</h3>
+                <table>
+                    <tr>
+                        <td><strong>ROOT</strong></td>
+                        <td>Arbeitsverzeichnis für Ausgaben (Logs, Mounts, Staging)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scanner</strong></td>
+                        <td>Pfad zum Scanner-Skript (Standard: <code>wallet_harvest_any.sh</code>)</td>
+                    </tr>
+                </table>
+                
+                <h3>Ziele-Liste</h3>
+                <p>Zentrale Liste aller zu durchsuchenden Orte. Verwenden Sie die Buttons rechts, um Ziele zu verwalten:</p>
+                <ul>
+                    <li><strong>Mehrfachauswahl:</strong> Halten Sie <span class="shortcut">Strg</span> gedrückt zum Auswählen mehrerer Einträge</li>
+                    <li><strong>Bereichsauswahl:</strong> <span class="shortcut">Shift</span> + Klick für Bereich</li>
+                    <li><strong>Löschen:</strong> Auswählen und "Auswahl entfernen" klicken</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="collapsible">✅ Optionen (Checkboxen)</button>
+        <div class="content">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Beschreibung</th>
+                            <th>Empfehlung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Aggressiv</strong></td>
+                            <td>Erweiterte Suchmuster, mehr Dateitypen, tiefere Suche</td>
+                            <td>Aktivieren für gründliche Scans (langsamer)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Staging anlegen</strong></td>
+                            <td>Erstellt Symlinks zu Funden unter <code>ROOT/Software/_staging_wallets/</code></td>
+                            <td>Aktivieren für einfachen Zugriff auf Funde</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mit Root (pkexec)</strong></td>
+                            <td>Startet Scanner mit Root-Rechten (erforderlich für Devices)</td>
+                            <td>Nur für Geräte-Scans aktivieren</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Auto-Mount</strong></td>
+                            <td>Automatisches Read-Only-Mounten von Images/Devices</td>
+                            <td>Standard aktiviert (empfohlen)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="collapsible">📊 Tabs (Ergebnisbereiche)</button>
+        <div class="content">
+            <div>
+                <h3>1. Live-Log Tab</h3>
+                <p>Zeigt die Echtzeit-Ausgabe des Scanners:</p>
+                <ul>
+                    <li>Aktuelle Aktion und Fortschritt</li>
+                    <li>Gefundene Dateien während des Scans</li>
+                    <li>Laufzeit-Timer (unten)</li>
+                    <li>Status: "Bereit", "Läuft", "Fertig", "Abgebrochen"</li>
+                </ul>
+                <p><strong>Auto-Scroll:</strong> Das Log scrollt automatisch nach unten bei neuen Einträgen.</p>
+
+                <h3>2. Hits Tab</h3>
+                <p>Tabellarische Übersicht aller Treffer:</p>
+                <ul>
+                    <li><strong>Spalten:</strong> Datei | Zeile | Treffer-Snippet</li>
+                    <li><strong>Filter:</strong> Regex-basiert (z.B. <code>wallet\.dat|electrum|bc1</code>)</li>
+                    <li><strong>Sortierung:</strong> Klick auf Spaltenköpfe zum Sortieren</li>
+                    <li><strong>Aktionen:</strong>
+                        <ul>
+                            <li><span class="button-demo">Öffnen</span> – Öffnet Datei-Location in Dolphin</li>
+                            <li><span class="button-demo">Export .tsv</span> – Exportiert gefilterte Treffer als TSV</li>
+                            <li><span class="button-demo">Kopieren</span> – In Zwischenablage kopieren</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>3. Mnemonics Tab</h3>
+                <p>Zeigt potenzielle Seed-Phrasen (12/24 Wörter):</p>
+                <ul>
+                    <li>Rohe Kandidaten aus dem Scan</li>
+                    <li>Kann False Positives enthalten</li>
+                    <li>Manuelle Überprüfung erforderlich</li>
+                </ul>
+
+                <h3>4. Anleitung Tab</h3>
+                <p>Eingebettete Kurzanleitung innerhalb der GUI.</p>
+            </div>
+        </div>
+
+        <button class="collapsible">🔘 Utility-Buttons</button>
+        <div class="content">
+            <div>
+                <table>
+                    <tr>
+                        <td><span class="button-demo">ROOT in Dolphin</span></td>
+                        <td>Öffnet das ROOT-Verzeichnis im Dateimanager</td>
+                    </tr>
+                    <tr>
+                        <td><span class="button-demo">Staging öffnen</span></td>
+                        <td>Öffnet <code>ROOT/Software/_staging_wallets/</code></td>
+                    </tr>
+                    <tr>
+                        <td><span class="button-demo">Logs öffnen</span></td>
+                        <td>Öffnet das Logs-Verzeichnis oder den letzten Scan-Ordner</td>
+                    </tr>
+                    <tr>
+                        <td><span class="button-demo">Scan starten</span></td>
+                        <td>Startet den Scan-Prozess</td>
+                    </tr>
+                    <tr>
+                        <td><span class="button-demo">Stop</span></td>
+                        <td>Bricht den laufenden Scan ab (wird erst aktiv während Scan)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow">
+    <h2>🔄 Detaillierter Arbeitsablauf</h2>
+
+    <div class="box">
+        <h3>Szenario 1: Festplatte/Ordner durchsuchen</h3>
+        <ol>
+            <li>Starten Sie die Wallet GUI</li>
+            <li>Setzen Sie ROOT auf einen Ordner mit genug Speicherplatz</li>
+            <li>Klicken Sie "Ordner hinzufügen" und wählen Sie das zu durchsuchende Verzeichnis</li>
+            <li>Optional: Aktivieren Sie "Aggressiv" für gründlichere Suche</li>
+            <li>Optional: Aktivieren Sie "Staging anlegen" für einfachen Zugriff</li>
+            <li>Klicken Sie "Scan starten"</li>
+            <li>Beobachten Sie den Fortschritt im Live-Log Tab</li>
+            <li>Nach Abschluss: Wechseln Sie zum Hits Tab und filtern Sie die Ergebnisse</li>
+            <li>Verwenden Sie "Öffnen" um gefundene Dateien zu inspizieren</li>
+            <li>Exportieren Sie wichtige Funde mit "Export .tsv"</li>
+        </ol>
+    </div>
+
+    <div class="box">
+        <h3>Szenario 2: Image-Datei (.img, .dd, .vdi) scannen</h3>
+        <ol>
+            <li>ROOT festlegen</li>
+            <li>"Datei/Abbild hinzufügen" klicken und Image auswählen</li>
+            <li><strong>Wichtig:</strong> "Auto-Mount" aktivieren (Standard)</li>
+            <li>Falls Root-Rechte nötig: "Mit Root (pkexec)" aktivieren</li>
+            <li>Scan starten – Image wird automatisch unter <code>ROOT/_mount/</code> gemountet</li>
+            <li>Nach dem Scan wird das Image automatisch unmountet</li>
+        </ol>
+    </div>
+
+    <div class="box">
+        <h3>Szenario 3: Physisches Gerät/Partition scannen</h3>
+        <ol>
+            <li>ROOT festlegen</li>
+            <li>"Device (/dev/…) hinzufügen" klicken</li>
+            <li>Gerät auswählen (z.B. <code>/dev/sdb1</code>)</li>
+            <li><strong>Erforderlich:</strong> "Mit Root (pkexec)" aktivieren</li>
+            <li><strong>Erforderlich:</strong> "Auto-Mount" aktivieren</li>
+            <li>Scan starten – Sie werden nach Root-Passwort gefragt</li>
+            <li>Gerät wird read-only gemountet und gescannt</li>
+        </ol>
+    </div>
+
+    <div class="box warning">
+        <h3>⚠️ Wichtige Hinweise</h3>
+        <ul>
+            <li><strong>Root-Rechte:</strong> Nur aktivieren, wenn nötig (Images/Devices)</li>
+            <li><strong>Read-Only:</strong> Auto-Mount verwendet read-only Modus zur Sicherheit</li>
+            <li><strong>Speicherplatz:</strong> Stellen Sie sicher, dass ROOT genug Platz für Logs hat</li>
+            <li><strong>Laufzeit:</strong> Große Scans können Stunden dauern – nutzen Sie den Timer</li>
+            <li><strong>Stop-Funktion:</strong> Sie können Scans jederzeit abbrechen</li>
+        </ul>
+    </div>
+</section>
+
+<!-- OPTIONEN -->
+<section id="options">
+    <h2>⚙️ Optionen im Detail</h2>
+
+    <div class="box info">
+        <h3>🔍 Aggressiv-Modus</h3>
+        <p><strong>Was macht es?</strong></p>
+        <ul>
+            <li>Erweitert Suchmuster um seltenere Wallet-Typen</li>
+            <li>Durchsucht mehr Dateitypen (Archive, Container, etc.)</li>
+            <li>Wendet tiefere Analyse-Methoden an</li>
+            <li>Sucht auch in versteckten/gelöschten Bereichen</li>
+        </ul>
+        <p><strong>Nachteile:</strong></p>
+        <ul>
+            <li>⏱️ Deutlich längere Scan-Dauer</li>
+            <li>💾 Mehr Ressourcenverbrauch (CPU/RAM)</li>
+            <li>🔍 Mehr False Positives möglich</li>
+        </ul>
+        <p><strong>Wann verwenden?</strong> Bei wichtigen Wiederherstellungsversuchen oder wenn Standard-Scan nichts findet.</p>
+    </div>
+
+    <div class="box success">
+        <h3>🔗 Staging anlegen</h3>
+        <p><strong>Funktion:</strong> Erstellt symbolische Links zu allen Funden in einem zentralen Ordner.</p>
+        <p><strong>Location:</strong> <code>ROOT/Software/_staging_wallets/</code></p>
+        <p><strong>Vorteile:</strong></p>
+        <ul>
+            <li>📁 Alle Funde an einem Ort</li>
+            <li>🔗 Originaldateien bleiben unberührt</li>
+            <li>✅ Einfaches Durcharbeiten der Treffer</li>
+            <li>💼 Perfekt für weitere Verarbeitung/Backup</li>
+        </ul>
+        <p><strong>Struktur:</strong></p>
+        <pre><code>_staging_wallets/
+├── bitcoin/
+│   ├── wallet.dat -> /original/path/wallet.dat
+│   └── ...
+├── electrum/
+│   └── default_wallet -> /original/path/default_wallet
+└── metamask/
+    └── vault -> /original/path/vault</code></pre>
+    </div>
+
+    <div class="box warning">
+        <h3>🔐 Mit Root (pkexec)</h3>
+        <p><strong>Wofür?</strong> Ermöglicht Zugriff auf geschützte Bereiche und Geräte.</p>
+        <p><strong>Erforderlich für:</strong></p>
+        <ul>
+            <li>Physische Geräte (<code>/dev/sdX</code>)</li>
+            <li>System-Partitionen</li>
+            <li>Geschützte Image-Dateien</li>
+        </ul>
+        <p><strong>⚠️ Sicherheitshinweis:</strong></p>
+        <ul>
+            <li>Sie werden nach Ihrem Root-Passwort gefragt</li>
+            <li>Scanner läuft mit erhöhten Rechten</li>
+            <li>Nur aktivieren, wenn wirklich nötig</li>
+            <li>Code ist Open Source und überprüfbar</li>
+        </ul>
+    </div>
+
+    <div class="box info">
+        <h3>💿 Auto-Mount</h3>
+        <p><strong>Automatisches Mounten von Images und Geräten</strong></p>
+        <p><strong>Unterstützte Formate:</strong></p>
+        <ul>
+            <li>Raw Images (.img, .dd, .raw)</li>
+            <li>Virtual Disks (.vdi, .vmdk, .vhd)</li>
+            <li>Physische Devices (<code>/dev/sdX</code>)</li>
+            <li>Archive (mit 7z/p7zip)</li>
+        </ul>
+        <p><strong>Mount-Optionen:</strong></p>
+        <ul>
+            <li><code>ro</code> – Read-Only (keine Änderungen möglich)</li>
+            <li><code>noexec</code> – Keine Ausführung von Programmen</li>
+            <li><code>nodev</code> – Keine Device-Dateien</li>
+        </ul>
+        <p><strong>Location:</strong> <code>ROOT/_mount/&lt;name&gt;/</code></p>
+        <p><strong>Cleanup:</strong> Automatisches Unmount nach Scan-Ende</p>
+    </div>
+</section>
+
+<!-- ERGEBNISSE -->
+<section id="results">
+    <h2>📊 Ergebnisse auswerten</h2>
+
+    <div class="box">
+        <h3>🎯 Hits filtern (Regex-Beispiele)</h3>
+        <p>Verwenden Sie den Filter im Hits-Tab, um spezifische Treffer zu finden:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Filter</th>
+                    <th>Findet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>wallet\.dat</code></td>
+                    <td>Nur wallet.dat Dateien</td>
+                </tr>
+                <tr>
+                    <td><code>electrum|wallet</code></td>
+                    <td>Electrum ODER wallet</td>
+                </tr>
+                <tr>
+                    <td><code>bc1[a-z0-9]{39,}</code></td>
+                    <td>Bitcoin Bech32 Adressen</td>
+                </tr>
+                <tr>
+                    <td><code>0x[a-fA-F0-9]{40}</code></td>
+                    <td>Ethereum Adressen</td>
+                </tr>
+                <tr>
+                    <td><code>xpub|xprv</code></td>
+                    <td>Extended Keys</td>
+                </tr>
+                <tr>
+                    <td><code>^(?!.*backup).*wallet</code></td>
+                    <td>Wallet, aber KEINE Backups</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box success">
+        <h3>📤 Export-Funktionen</h3>
+        
+        <h4>1. Export als TSV</h4>
+        <ul>
+            <li>Exportiert gefilterte Hits als Tab-Separated-Values</li>
+            <li>Öffnen mit: Excel, LibreOffice, Texteditor</li>
+            <li>Format: <code>Datei | Zeile | Snippet</code></li>
+            <li>Verwendung: Dokumentation, Weitergabe, weitere Analyse</li>
+        </ul>
+
+        <h4>2. In Zwischenablage kopieren</h4>
+        <ul>
+            <li>Kopiert gefilterte Hits direkt in die Zwischenablage</li>
+            <li>Schnelles Einfügen in andere Tools</li>
+            <li>Format identisch zu TSV-Export</li>
+        </ul>
+
+        <h4>3. Einzelne Dateien öffnen</h4>
+        <ul>
+            <li>Wählen Sie einen Treffer in der Tabelle</li>
+            <li>Klicken Sie "Öffnen"</li>
+            <li>Dolphin öffnet sich mit markierter Datei</li>
+            <li>Direkter Zugriff auf Originaldatei</li>
+        </ul>
+    </div>
+
+    <div class="box info">
+        <h3>📁 Verzeichnisstruktur nach dem Scan</h3>
+        <pre><code>ROOT/
+├── _logs/
+│   └── walletscan_20251006_143022/
+│       ├── hits.txt              # Alle Treffer
+│       ├── mnemonic_raw.txt      # Seed-Kandidaten
+│       ├── scan.log              # Vollständiges Log
+│       └── summary.txt           # Zusammenfassung
+├── _mount/
+│   └── image_name/               # Gemountete Images (temporär)
+└── Software/
+    └── _staging_wallets/         # Symlinks zu Funden
+        ├── bitcoin/
+        ├── electrum/
+        ├── metamask/
+        └── ...
+</code></pre>
+    </div>
+</section>
+
+<!-- ERWEITERT -->
+<section id="advanced">
+    <h2>🎓 Erweiterte Funktionen</h2>
+
+    <div class="box">
+        <h3>🔧 Scanner-Skript anpassen</h3>
+        <p>Sie können eigene Scanner-Skripte verwenden:</p>
+        <ol>
+            <li>Erstellen Sie ein Bash-Skript mit der Signatur:<br>
+                <code>script.sh ROOT [OPTIONS] TARGET [TARGET2 ...]</code></li>
+            <li>Skript muss Ausgabe im Format schreiben:<br>
+                <code>OUT=/pfad/zum/scan-ordner</code></li>
+            <li>In GUI: "Scanner wählen…" und Ihr Skript auswählen</li>
+        </ol>
+        
+        <p><strong>Beispiel-Struktur:</strong></p>
+        <pre><code>#!/bin/bash
+ROOT="$1"
+shift
+# ... Optionen parsen ...
+# ... Scan durchführen ...
+echo "OUT=${OUTDIR}"  # Wichtig für GUI!</code></pre>
+    </div>
+
+    <div class="box">
+        <h3>⌨️ Kommandozeilen-Aufruf</h3>
+        <p>Scanner kann auch direkt über Terminal genutzt werden:</p>
+        <pre><code># Einfacher Scan
+bash wallet_harvest_any.sh /mnt/daten /path/to/scan
+
+# Mit Optionen
+bash wallet_harvest_any.sh /mnt/daten --aggressive --staging /path/to/scan
+
+# Mit Auto-Mount für Image
+bash wallet_harvest_any.sh /mnt/daten --auto-mount image.dd
+
+# Mit Root-Rechten
+sudo bash wallet_harvest_any.sh /mnt/daten --auto-mount /dev/sdb1</code></pre>
+    </div>
+
+    <div class="box">
+        <h3>🔗 Integration in eigene Tools</h3>
+        <p>Die GUI kann programmatisch gesteuert werden:</p>
+        <pre><code># Python
+from wallet_gui import MainWindow
+from PyQt6.QtWidgets import QApplication
+
+app = QApplication([])
+window = MainWindow()
+window.rootEdit.setText("/custom/root")
+window.targets.addItem("/custom/target")
+window.show()
+app.exec()</code></pre>
+    </div>
+</section>
+
+<!-- FEHLERBEHEBUNG -->
+<section id="troubleshooting">
+    <h2>🔧 Fehlerbehebung</h2>
+
+    <div class="interactive-section">
+        <button class="collapsible">❌ GUI startet nicht</button>
+        <div class="content">
+            <div>
+                <p><strong>Mögliche Ursachen & Lösungen:</strong></p>
+                <ol>
+                    <li><strong>PyQt6 nicht installiert</strong><br>
+                        <code>sudo apt install python3-pyqt6</code></li>
+                    <li><strong>Python-Version zu alt</strong><br>
+                        Benötigt Python 3.8+ – prüfen mit <code>python3 --version</code></li>
+                    <li><strong>Fehler in der Konsole prüfen</strong><br>
+                        <code>python3 ~/.local/share/wallet-gui/wallet_gui.py</code></li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="collapsible">🚫 Scan startet nicht</button>
+        <div class="content">
+            <div>
+                <p><strong>Checkliste:</strong></p>
+                <ul>
+                    <li>✅ ROOT-Pfad existiert und ist beschreibbar?</li>
+                    <li>✅ Scanner-Skript existiert und ist ausführbar?<br>
+                        <code>chmod +x ~/.local/share/wallet-gui/scripts/wallet_harvest_any.sh</code></li>
+                    <li>✅ Bei Devices: "Mit Root" aktiviert?</li>
+                    <li>✅ Mindestens ein Ziel hinzugefügt oder Standard-Ziele vorhanden?</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="collapsible">📊 Keine Ergebnisse im Hits-Tab</button>
+        <div class="content">
+            <div>
+                <p><strong>Mögliche Gründe:</strong></p>
+                <ol>
+                    <li><strong>Scan noch nicht abgeschlossen</strong><br>
+                        Ergebnisse werden erst nach Scan-Ende geladen</li>
+                    <li><strong>Keine Wallets gefunden</strong><br>
+                        Versuchen Sie "Aggressiv"-Modus</li>
+                    <li><strong>Filter zu restriktiv</strong><br>
+                        Leeren Sie das Filter-Feld</li>
+                    <li><strong>Logs prüfen</strong><br>
+                        Öffnen Sie <code>ROOT/_logs/*/hits.txt</code> manuell</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="collapsible">💿 Mount-Fehler bei Images</button>
+        <div class="content">
+            <div>
+                <p><strong>Lösungsansätze:</strong></p>
+                <ul>
+                    <li><strong>Root-Rechte erforderlich:</strong><br>
+                        Aktivieren Sie "Mit Root (pkexec)"</li>
+                    <li><strong>Tools fehlen:</strong><br>
+                        <code>sudo apt install sleuthkit ntfs-3g</code></li>
+                    <li><strong>Image beschädigt:</strong><br>
+                        Prüfen mit <code>file image.dd</code></li>
+                    <li><strong>Bereits gemountet:</strong><br>
+                        <code>sudo umount ROOT/_mount/*</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="collapsible">⏱️ Scan extrem langsam</button>
+        <div class="content">
+            <div>
+                <p><strong>Optimierungen:</strong></p>
+                <ul>
+                    <li>Deaktivieren Sie "Aggressiv" für schnellere Scans</li>
+                    <li>Grenzen Sie Ziele ein (nur relevante Ordner)</li>
+                    <li>Schließen Sie Backup-Ordner aus</li>
+                    <li>Nutzen Sie Filter statt alles zu scannen</li>
+                    <li>Prüfen Sie Festplatten-Gesundheit (defekte Sektoren)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <h2>❓ Häufig gestellte Fragen (FAQ)</h2>
+
+    <div class="box">
+        <h3>Ist die Wallet GUI sicher?</h3>
+        <p>✅ <strong>Ja.</strong> Die GUI ist Open Source, liest nur Daten (außer Logs schreiben) und verwendet read-only Mounts für Geräte. Bei "Mit Root" sollten Sie dem Code vertrauen – er ist vollständig einsehbar.</p>
+    </div>
+
+    <div class="box">
+        <h3>Kann ich mehrere Scans parallel laufen lassen?</h3>
+        <p>❌ <strong>Nein.</strong> Pro GUI-Instanz ist nur ein Scan gleichzeitig möglich. Sie können aber mehrere GUI-Fenster öffnen.</p>
+    </div>
+
+    <div class="box">
+        <h3>Werden Dateien verändert oder gelöscht?</h3>
+        <p>❌ <strong>Nein.</strong> Der Scanner arbeitet read-only. Es werden nur Logs, Mounts und Staging-Links erstellt – niemals Original-Dateien modifiziert.</p>
+    </div>
+
+    <div class="box">
+        <h3>Was ist der Unterschied zwischen Hits und Mnemonics?</h3>
+        <p><strong>Hits:</strong> Alle Treffer mit Context (Datei, Zeile, Snippet) – z.B. wallet.dat Dateien, Adressen, Keys<br>
+        <strong>Mnemonics:</strong> Spezielle Extraktion von Seed-Phrasen (12/24 Wörter) – nur Kandidaten, oft False Positives</p>
+    </div>
+
+    <div class="box">
+        <h3>Wie lange dauert ein typischer Scan?</h3>
+        <p>⏱️ <strong>Abhängig von:</strong></p>
+        <ul>
+            <li>Datenmenge (1 TB = mehrere Stunden)</li>
+            <li>Aggressiv-Modus (2-5x langsamer)</li>
+            <li>Dateisystem (NTFS langsamer als ext4)</li>
+            <li>Festplatten-Geschwindigkeit (SSD >> HDD)</li>
+        </ul>
+        <p><strong>Faustregel:</strong> 100 GB normale Daten ≈ 15-30 Minuten (ohne Aggressiv)</p>
+    </div>
+
+    <div class="box">
+        <h3>Kann ich Scans pausieren und fortsetzen?</h3>
+        <p>❌ <strong>Derzeit nicht.</strong> Sie können Scans stoppen, aber nicht pausieren. Ein Neustart beginnt von vorne.</p>
+    </div>
+
+    <div class="box">
+        <h3>Werden verschlüsselte Wallets erkannt?</h3>
+        <p>⚠️ <strong>Teilweise.</strong> Verschlüsselte Wallet-<em>Dateien</em> (wie verschlüsselte wallet.dat) werden gefunden, aber der Inhalt kann nicht gelesen werden. Sie benötigen das Passwort zur späteren Entschlüsselung.</p>
+    </div>
+
+    <div class="box">
+        <h3>Wo finde ich die Scanner-Logs?</h3>
+        <p>📁 <code>ROOT/_logs/walletscan_&lt;timestamp&gt;/</code><br>
+        Oder verwenden Sie den Button "Logs öffnen" in der GUI.</p>
+    </div>
+
+    <div class="box">
+        <h3>Unterstützt die GUI auch andere Betriebssysteme?</h3>
+        <p>🐧 <strong>Linux:</strong> Vollständig unterstützt (getestet)<br>
+        🪟 <strong>Windows:</strong> Theoretisch möglich mit WSL, aber nicht getestet<br>
+        🍎 <strong>macOS:</strong> Theoretisch möglich, aber nicht getestet</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<section style="margin-top: 50px; padding-top: 30px; border-top: 2px solid #444; text-align: center;">
+    <p style="color: #888;">
+        <strong>Wallet GUI Version 1.0</strong><br>
+        Entwickelt für sichere Wallet-Wiederherstellung und Forensik<br>
+        <em>Open Source – Transparent – Sicher</em>
+    </p>
+    <p style="color: #666; font-size: 12px;">
+        Letzte Aktualisierung: Oktober 2025
+    </p>
+</section>
+
+</div>
+
+<script>
+// Collapsible sections
+document.addEventListener('DOMContentLoaded', function() {
+    const collapsibles = document.querySelectorAll('.collapsible');
+    
+    collapsibles.forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const content = this.nextElementSibling;
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

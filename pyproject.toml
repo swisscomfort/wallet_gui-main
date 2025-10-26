@@ -64,11 +64,11 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/wallet-scanner/wallet-gui"
-Repository = "https://github.com/wallet-scanner/wallet-gui.git"
-"Bug Tracker" = "https://github.com/wallet-scanner/wallet-gui/issues"
-Documentation = "https://wallet-scanner.readthedocs.io/"
-Changelog = "https://github.com/wallet-scanner/wallet-gui/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/swisscomfort/wallet_gui-main"
+Repository = "https://github.com/swisscomfort/wallet_gui-main.git"
+"Bug Tracker" = "https://github.com/swisscomfort/wallet_gui-main/issues"
+Documentation = "https://github.com/swisscomfort/wallet_gui-main#readme"
+Changelog = "https://github.com/swisscomfort/wallet_gui-main/blob/main/CHANGELOG.md"
 
 [project.scripts]
 wallet-scanner = "wallet_scanner.cli.cli_main:main"

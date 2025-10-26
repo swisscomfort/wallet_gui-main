@@ -135,9 +135,9 @@ setup(
     # URLs and metadata
     url="https://github.com/wallet-scanner/wallet-gui",
     project_urls={
-        "Bug Tracker": "https://github.com/wallet-scanner/wallet-gui/issues",
-        "Documentation": "https://wallet-scanner.readthedocs.io/",
-        "Source Code": "https://github.com/wallet-scanner/wallet-gui",
+        "Bug Reports": "https://github.com/swisscomfort/wallet_gui-main/issues",
+        "Source": "https://github.com/swisscomfort/wallet_gui-main",
+        "Documentation": "https://github.com/swisscomfort/wallet_gui-main#readme",
     },
     
     # License

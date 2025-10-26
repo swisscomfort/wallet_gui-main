@@ -10,6 +10,29 @@
 [![GitHub stars](https://img.shields.io/github/stars/swisscomfort/wallet_gui-main)](https://github.com/swisscomfort/wallet_gui-main/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/swisscomfort/wallet_gui-main)](https://github.com/swisscomfort/wallet_gui-main/issues)
 
+---
+
+## 📦 **BONUS: Project Bundle Creator Tool**
+
+**NEU:** Dieses Repository enthält auch ein universelles Tool zum Erstellen selbstentpackender Projekt-Bundles!
+
+### 🚀 **Direkter Download:**
+```bash
+curl -O https://raw.githubusercontent.com/swisscomfort/wallet_gui-main/main/tools/pack_project.sh
+chmod +x pack_project.sh
+./pack_project.sh /pfad/zum/projekt
+```
+
+**Features:** 
+- 📦 Self-extracting `.run` bundles
+- 🔐 SHA256-Integritätsprüfung  
+- 🤖 Auto-Detection für Docker/Python/Node.js/Shell
+- 🧹 Smart Excludes für saubere Bundles
+
+👉 **[📖 Vollständige Dokumentation](docs/PACK_PROJECT_GUIDE.md)**
+
+---
+
 A comprehensive forensic analysis tool for cryptocurrency wallets, featuring both a modern GUI interface and powerful CLI capabilities. Designed for security professionals, forensic investigators, and blockchain analysts.
 
 ## 🚀 Features

@@ -1,0 +1,208 @@
+==========================================================================
+ 🖥️ TERMINAL-FENSTER FEATURE - Transparente Scanner-Ausführung
+==========================================================================
+
+ÜBERBLICK:
+---------
+Neues Feature: Die GUI kann jetzt beim Scan-Start automatisch ein externes 
+Terminal-Fenster öffnen, in dem der Scanner-Output live sichtbar ist.
+
+ZWECK:
+------
+✓ Transparenz - Sehen was der Scanner tut
+✓ Debugging - Fehler sofort erkennen
+✓ Performance-Monitoring - Geschwindigkeit beobachten
+✓ Fortschritt - Welche Dateien werden gerade durchsucht?
+✓ Vertrauen - Der Scanner zeigt alles was er tut
+
+VERWENDUNG:
+-----------
+1. Checkbox aktivieren: "🖥️ Terminal-Fenster beim Scan zeigen"
+2. Scanner starten (Scan Button)
+3. Externes Terminal öffnet sich automatisch
+4. Scanner-Output erscheint live im Terminal
+5. Nach Scan-Ende: Enter drücken um Terminal zu schließen
+6. GUI lädt automatisch die Ergebnisse
+
+UNTERSTÜTZTE TERMINALS:
+-----------------------
+Die GUI erkennt automatisch folgende Terminal-Emulatoren:
+
+1. konsole (KDE)          - Empfohlen für KDE-Systeme
+2. gnome-terminal (GNOME) - Für GNOME-Desktop
+3. xfce4-terminal (XFCE)  - Für XFCE-Desktop
+4. xterm                  - Universeller Fallback
+5. x-terminal-emulator    - Debian/Ubuntu-Standard
+
+Falls KEIN Terminal gefunden wird:
+→ Warnung erscheint
+→ Checkbox wird deaktiviert
+→ Scan läuft normal im GUI-Modus
+
+TECHNISCHE DETAILS:
+------------------
+Implementierung in wallet_gui.py:
+
+1. Checkbox hinzugefügt (Zeile ~88-108):
+   - self.chkShowTerminal
+   - Tooltip mit Erklärung
+   - In opts2-Layout (zweite Optionen-Zeile)
+
+2. Terminal-Launcher (Zeile ~1125):
+   - open_scanner_terminal(cmd)
+   - Erstellt Wrapper-Script mit Header
+   - Erkennt verfügbares Terminal
+   - Führt Scanner im Terminal aus
+   - Zeigt Exit-Code am Ende
+
+3. Wrapper-Script-Features:
+   ═══════════════════════════════════════
+    🔍 Wallet Scanner - Live Output
+   ═══════════════════════════════════════
+   
+   Scanner: /pfad/zum/scanner.sh
+   ROOT: /daten/verzeichnis
+   Targets: 3
+   
+   [... Live Output ...]
+   
+   ═══════════════════════════════════════
+    ✅ Scanner erfolgreich beendet
+   ═══════════════════════════════════════
+   
+   Drücke Enter um Fenster zu schließen...
+
+4. Cleanup:
+   - Temporäres Script wird nach 5 Minuten gelöscht
+   - Terminal bleibt offen bis Enter gedrückt
+   - GUI reagiert normal (kein Freeze)
+
+UNTERSCHIEDE ZU NORMALEM MODUS:
+-------------------------------
+Normal-Modus (ohne Terminal):
+- Output nur in GUI Live-Log Tab
+- Keine externe Ansicht
+- Kompakt und integriert
+
+Terminal-Modus (mit Checkbox):
+- Output im externen Terminal-Fenster
+- GUI-Log zeigt nur "Terminal geöffnet"
+- Terminal bleibt nach Scan offen
+- Exit-Code wird angezeigt
+- Fehler direkt sichtbar
+
+VORTEILE:
+---------
+✓ Transparenz: Alles was der Scanner macht ist sichtbar
+✓ Debugging: Fehler und Warnungen sofort erkennbar
+✓ Parallele Arbeit: GUI bleibt bedienbar während Scan läuft
+✓ Kopieren: Terminal-Output kann direkt kopiert werden
+✓ Scrollback: Gesamter Output bleibt verfügbar
+✓ Farben: Terminal zeigt eventuell farbige Ausgaben
+✓ Performance: Große Outputs bremsen GUI nicht
+
+ANWENDUNGSFÄLLE:
+----------------
+1. Erste Tests mit neuem Scanner
+2. Debugging bei Problemen
+3. Performance-Analyse (wie schnell läuft Scanner?)
+4. Große Scans (238 GB Images) - Fortschritt beobachten
+5. Auto-Mount Debugging (sehen wie Devices gemountet werden)
+6. Lernzwecke (verstehen was Scanner macht)
+7. Dokumentation (Terminal-Output für Reports)
+
+BEISPIEL-OUTPUT IM TERMINAL:
+----------------------------
+═══════════════════════════════════════════════════════════
+ 🔍 Wallet Scanner - Live Output
+═══════════════════════════════════════════════════════════
+
+Scanner: /home/emil/.local/share/wallet-gui/scripts/hrm_swarm_scanner_wrapper.sh
+ROOT: /tmp/wallet_test_suite
+Targets: 1
+
+═══════════════════════════════════════════════════════════
+
+[HRM_SWARM_SCANNER] Starte Scanner...
+[HRM_SWARM_SCANNER] ROOT: /tmp/wallet_test_suite
+[HRM_SWARM_SCANNER] TARGETS: /tmp/wallet_test_suite
+[HRM_SWARM_SCANNER] Scanning...
+
+WALLET_HIT: /tmp/wallet_test_suite/bitcoin_core/wallet.dat
+WALLET_HIT: /tmp/wallet_test_suite/ethereum/keystore.json
+WALLET_HIT: /tmp/wallet_test_suite/electrum/default_wallet
+...
+
+[HRM_SWARM_SCANNER] Scan abgeschlossen
+[HRM_SWARM_SCANNER] Hits gefunden: 10
+[HRM_SWARM_SCANNER] Zeit: 0.08s
+
+═══════════════════════════════════════════════════════════
+ ✅ Scanner erfolgreich beendet
+═══════════════════════════════════════════════════════════
+
+Drücke Enter um Fenster zu schließen...
+
+FEHLERBEHANDLUNG:
+-----------------
+1. Kein Terminal gefunden:
+   → MessageBox mit Installationshinweisen
+   → Checkbox wird automatisch deaktiviert
+   → Scan läuft normal im GUI-Modus
+
+2. Terminal-Start fehlgeschlagen:
+   → Fehler im GUI-Log
+   → on_proc_finished_terminal wird aufgerufen
+   → Scan gilt als beendet
+
+3. Wrapper-Script Fehler:
+   → Exit-Code wird angezeigt
+   → ❌ statt ✅ im Footer
+   → Terminal bleibt für Fehleranalyse offen
+
+KONFIGURATION:
+--------------
+Kein Setup nötig! Feature funktioniert out-of-the-box wenn:
+✓ Mindestens ein Terminal-Emulator installiert ist
+✓ GUI hat Ausführungsrechte für Terminal-Start
+✓ /tmp ist beschreibbar (für Wrapper-Script)
+
+Terminal installieren (falls fehlt):
+- Fedora/RHEL: sudo dnf install konsole
+- Debian/Ubuntu: sudo apt install gnome-terminal
+- Arch: sudo pacman -S konsole
+- Fallback: sudo apt install xterm
+
+CODE-REFERENZ:
+--------------
+wallet_gui.py:
+- Zeile 88-108: Checkbox-Definition
+- Zeile 1085-1145: start_scan() mit Terminal-Integration
+- Zeile 1147-1215: open_scanner_terminal()
+- Zeile 1217-1222: cleanup_wrapper()
+- Zeile 1224-1233: on_proc_finished_terminal()
+
+ZUKÜNFTIGE ERWEITERUNGEN:
+-------------------------
+Mögliche Features:
+- Dropdown zur Auswahl des Terminal-Emulators
+- Terminal-Größe/Position speichern
+- Farbschema-Auswahl (dark/light)
+- Font-Größe konfigurierbar
+- Option "Terminal nach Scan automatisch schließen"
+- Terminal-Output in Datei speichern
+- Split-Screen: GUI + Terminal nebeneinander
+
+FAZIT:
+------
+Das Terminal-Fenster-Feature erhöht die Transparenz und macht das 
+Scanner-Verhalten nachvollziehbar. Besonders nützlich beim Debugging 
+und bei langen Scans von großen Datenträgern.
+
+Perfekt für Nutzer die wissen wollen was genau passiert! 🔍
+
+==========================================================================
+Erstellt: $(date)
+Version: wallet_gui.py v1.3
+Feature: Terminal Window Integration
+==========================================================================

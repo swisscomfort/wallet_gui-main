@@ -1,0 +1,193 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wallet-scanner"
+dynamic = ["version"]
+description = "Cryptocurrency Wallet Forensic Scanner with GUI"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Wallet Scanner Team", email = "wallet-scanner@example.com"},
+]
+maintainers = [
+    {name = "Emil", email = "emil@example.com"},
+]
+keywords = [
+    "cryptocurrency", "wallet", "forensics", "blockchain", "security",
+    "bitcoin", "ethereum", "scanning", "gui", "cli", "pyqt6"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: Information Technology", 
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10", 
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Forensics",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Desktop Environment :: K Desktop Environment (KDE)",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "PyQt6>=6.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-qt>=4.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.950",
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0",
+    "twine>=4.0",
+    "build>=0.8",
+]
+docs = [
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0", 
+    "myst-parser>=0.18",
+]
+test = [
+    "pytest>=7.0",
+    "pytest-qt>=4.0",
+    "pytest-cov>=3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/wallet-scanner/wallet-gui"
+Repository = "https://github.com/wallet-scanner/wallet-gui.git"
+"Bug Tracker" = "https://github.com/wallet-scanner/wallet-gui/issues"
+Documentation = "https://wallet-scanner.readthedocs.io/"
+Changelog = "https://github.com/wallet-scanner/wallet-gui/blob/main/CHANGELOG.md"
+
+[project.scripts]
+wallet-scanner = "wallet_scanner.cli.cli_main:main"
+wallet-scanner-gui = "wallet_scanner.gui.app:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+wallet_scanner = ["*.yaml", "*.yml", "*.json", "*.txt", "*.md"]
+
+[tool.setuptools.dynamic]
+version = {attr = "wallet_scanner.core.config.APP_VERSION"}
+
+# Black code formatter configuration
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311", "py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # Exclude legacy archive directory
+  _archive
+  | legacy_scripts
+  | test_scripts
+)/
+'''
+
+# Flake8 linter configuration  
+[tool.flake8]
+max-line-length = 100
+extend-ignore = ["E203", "W503", "E501"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist", 
+    "_archive",
+    "legacy_scripts",
+    "test_scripts",
+]
+
+# MyPy type checker configuration
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "PyQt6.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config", 
+    "--verbose",
+    "--tb=short",
+    "--cov=wallet_scanner",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "gui: marks tests that require GUI components",
+    "integration: marks integration tests",
+    "unit: marks unit tests",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src/wallet_scanner"]
+omit = [
+    "*/tests/*",
+    "*/_archive/*",
+    "*/legacy_scripts/*", 
+    "*/test_scripts/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError", 
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Sphinx documentation configuration
+[tool.sphinx]
+source-dir = "docs"
+build-dir = "docs/_build"

@@ -1,0 +1,71 @@
+# MANIFEST.in - Package data inclusion rules for Wallet Scanner
+
+# Include important documentation files
+include README.md
+include README_NEW.md
+include LICENSE
+include CHANGELOG.md
+include INSTALL.md
+include SECURITY.md
+
+# Include configuration and setup files
+include pyproject.toml
+include setup.py
+include requirements.txt
+
+# Include example and configuration files
+include hrm_policy.yaml
+recursive-include examples *.yaml *.yml *.json *.conf
+
+# Include scripts directory
+recursive-include scripts *.sh *.py
+graft scripts
+
+# Include documentation
+recursive-include docs *.md *.rst *.txt *.html
+graft docs
+
+# Include test files
+recursive-include tests *.py
+graft tests
+
+# Include assets (icons, images, etc.)
+recursive-include assets *.png *.ico *.svg *.jpg
+graft assets
+
+# Include desktop integration files
+recursive-include data *.desktop
+graft data
+
+# Include package data
+recursive-include src/wallet_scanner *.yaml *.yml *.json *.txt *.md
+
+# Exclude unwanted files and directories
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+global-exclude .coverage
+global-exclude htmlcov
+
+# Exclude legacy and archive directories
+prune _archive
+prune legacy_scripts
+prune test_scripts
+
+# Exclude build artifacts
+prune build
+prune dist
+prune *.egg-info
+
+# Exclude IDE files
+global-exclude .vscode
+global-exclude .idea
+global-exclude *.swp
+global-exclude *.swo
+global-exclude *~

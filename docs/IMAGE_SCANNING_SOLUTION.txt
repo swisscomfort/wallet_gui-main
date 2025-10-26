@@ -1,0 +1,140 @@
+═══════════════════════════════════════════════════════════
+ 🎯 ANTWORT: WELCHE DATEIEN WERDEN GESCANNT?
+═══════════════════════════════════════════════════════════
+
+DEIN PROBLEM:
+   volume_disk_2025-10-06-1346.img (233 GB) wird nicht gescannt!
+
+WARUM?
+   ❌ Datei ist 233 GB groß
+   ❌ Scanner-Limit: 512 MB (Normal) / 1024 MB (Aggressiv)
+   ❌ Datei wird ÜBERSPRUNGEN weil zu groß!
+
+═══════════════════════════════════════════════════════════
+ ✅ LÖSUNG: IMAGE-DATEI DIREKT HINZUFÜGEN!
+═══════════════════════════════════════════════════════════
+
+RICHTIG (Image scannen):
+   1. "Datei/Abbild hinzufügen" klicken
+   2. Navigiere zu /mnt/mediacenter1/sido/
+   3. Wähle: volume_disk_2025-10-06-1346.img
+   4. Aktiviere: "Mit Root (pkexec)" ✓
+   5. Aktiviere: "Auto-Mount" ✓
+   6. Scan starten
+   
+   → Image wird GEMOUNTET (nicht content-gescannt!)
+   → INHALT des Images wird gescannt!
+   → Cleanup automatisch am Ende
+
+FALSCH (nur kleine Dateien):
+   1. "Ordner hinzufügen" klicken
+   2. Wähle: /mnt/mediacenter1/sido/
+   3. Scan starten
+   
+   → .img wird ÜBERSPRUNGEN (zu groß!)
+   → Nur .log und .txt werden gescannt
+   → Image-INHALT wird NICHT gescannt!
+
+═══════════════════════════════════════════════════════════
+ 📋 SCANNER-REGELN
+═══════════════════════════════════════════════════════════
+
+ORDNER hinzufügen:
+   → Rekursive Datei-Enumeration
+   → Alle Dateien <= 512 MB werden gescannt
+   → Große Dateien (> 512 MB) werden ÜBERSPRUNGEN
+   → Gut für: Normale Ordner mit vielen Dateien
+
+DATEI hinzufügen (.img, .iso, .dd):
+   → Auto-Mount (braucht Root-Rechte!)
+   → Image wird read-only gemountet
+   → INHALT wird gescannt (nicht die Image-Datei selbst!)
+   → Gut für: Disk-Images, ISO-Files
+
+DATEI hinzufügen (.zip, .7z, .tar):
+   → Auto-Extract nach /tmp/
+   → Archiv wird entpackt
+   → INHALT wird gescannt
+   → Gut für: Archive, Backups
+
+DEVICE hinzufügen (/dev/sdX):
+   → Auto-Mount (braucht Root-Rechte!)
+   → Device wird read-only gemountet
+   → INHALT wird gescannt
+   → Gut für: USB-Sticks, externe HDDs
+
+═══════════════════════════════════════════════════════════
+ 🔧 DATEIGRÖSSEN-LIMITS
+═══════════════════════════════════════════════════════════
+
+Normal-Modus:
+   Max. Dateigröße: 512 MB
+   → Dateien > 512 MB werden ÜBERSPRUNGEN
+
+Aggressiv-Modus:
+   Max. Dateigröße: 1024 MB (1 GB)
+   → Dateien > 1 GB werden ÜBERSPRUNGEN
+   
+ABER: Images/Archive haben KEIN Limit!
+   → Sie werden gemountet/extrahiert, nicht content-gescannt
+   → 233 GB .img? Kein Problem mit Auto-Mount!
+
+═══════════════════════════════════════════════════════════
+ 📊 WELCHE DATEITYPEN?
+═══════════════════════════════════════════════════════════
+
+Content-Scan scannt ALLE Dateien (kein Extension-Filter!):
+   ✅ .txt
+   ✅ .bin
+   ✅ .json, .xml, .html
+   ✅ .log, .conf, .ini
+   ✅ .js, .py, .sh
+   ✅ Dateien OHNE Extension
+   ✅ Binärdateien (mit -a Flag)
+   
+ABER: Nur wenn Dateigröße <= Limit!
+
+═══════════════════════════════════════════════════════════
+ 🎯 DEIN KONKRETER FALL
+═══════════════════════════════════════════════════════════
+
+Ordner: /mnt/mediacenter1/sido/
+   ├─ volume_disk_2025-10-06-1346.img  → 233 GB
+   ├─ volume_disk_2025-10-06-1346.log  → 419 B
+   └─ volume_parttbl_2025-10-06-1346.txt → 0 B
+
+WENN du ORDNER hinzufügst:
+   → .img ÜBERSPRUNGEN (233 GB > 512 MB) ❌
+   → .log gescannt ✓
+   → .txt gescannt ✓
+   
+   Ergebnis: Image-INHALT wird NICHT gescannt!
+
+WENN du IMAGE-DATEI hinzufügst:
+   → .img gemountet (Auto-Mount) ✓
+   → Mount-Punkt: /tmp/wallet_mount_XXX/
+   → INHALT des Images wird rekursiv gescannt ✓
+   
+   Ergebnis: Alle Dateien IM IMAGE werden gescannt!
+
+═══════════════════════════════════════════════════════════
+ ⚡ QUICK FIX
+═══════════════════════════════════════════════════════════
+
+1. Stoppe aktuellen Scan (falls läuft)
+2. Leere die Target-Liste
+3. "Datei/Abbild hinzufügen" klicken
+4. KDialog öffnet → navigiere zu /mnt/mediacenter1/sido/
+5. Wähle: volume_disk_2025-10-06-1346.img
+6. Aktiviere: ✓ Mit Root (pkexec)
+7. Aktiviere: ✓ Auto-Mount
+8. Scan starten
+9. Geduld: 233 GB Image wird gemountet + gescannt
+
+═══════════════════════════════════════════════════════════
+ 📚 DOKUMENTATION
+═══════════════════════════════════════════════════════════
+
+Details: SCANNER_FILE_HANDLING.md
+
+═══════════════════════════════════════════════════════════

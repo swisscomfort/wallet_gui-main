@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8">
+<style>
+body{font:14px/1.45 system-ui,Segoe UI,Roboto,Ubuntu,sans-serif;margin:0;padding:14px;color:#ddd;background:#222}
+h1{font-size:22px;margin:.3em 0} h2{font-size:18px;margin:.8em 0 .3em}
+.box{background:#2a2a2a;border:1px solid #3a3a3a;border-radius:8px;padding:10px;margin:8px 0}
+code{background:#333;padding:.1em .3em;border-radius:4px}
+</style>
+<h1>Wallet GUI – Kurz-Anleitung</h1>
+<div class="box"><b>ROOT</b>: Arbeitsordner (Logs/Mounts/Staging). <b>Scanner</b>: Script (wallet_harvest_any.sh).</div>
+<h2>Ziele</h2>
+<div class="box">Ordner / Datei-Abbild / Gerät hinzufügen · Auswahl entfernen · Liste leeren.</div>
+<h2>Optionen</h2>
+<div class="box"><b>Aggressiv</b> = tiefere Suche; <b>Staging anlegen</b> = Symlinks unter ROOT/Software/_staging_wallets/;
+<b>Mit Root</b> + <b>Auto-Mount</b> (ro) für Images/Devices unter ROOT/_mount/&lt;name&gt;/.</div>
+<h2>Aktionen</h2>
+<div class="box">Scan starten · ROOT in Dolphin · Staging öffnen · Logs öffnen.</div>
+<h2>Ergebnisse</h2>
+<div class="box"><b>Live-Log</b> (Ablauf) • <b>Hits</b> (wallet.dat, electrum, metamask, bip39/bip32, mnemonic/seed, xpub/xprv, bc1…, 0x…)
+• <b>Mnemonics</b> (grobe 12/24-Wort Kandidaten) • <b>Anleitung</b> (diese Seite).</div>
+<h2>Typischer Ablauf</h2>
+<ol><li>ROOT wählen</li><li>Ziele hinzufügen</li><li>Bei Images/Devices: „Mit Root“ + „Auto-Mount“</li><li>Scan starten → Tabs prüfen</li></ol>
+<h2>Schreibt Pfade</h2>
+<ul><li>ROOT/_logs/walletscan_YYYYMMDD_HHMMSS/</li><li>ROOT/_mount/&lt;name&gt;/</li><li>ROOT/Software/_staging_wallets/</li></ul>

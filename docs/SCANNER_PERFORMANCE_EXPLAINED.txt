@@ -1,0 +1,296 @@
+═══════════════════════════════════════════════════════════
+ 📊 SCANNER PERFORMANCE: WIE FUNKTIONIERT DAS?
+═══════════════════════════════════════════════════════════
+
+Frage: Wie kann ein 238 GB Image in 0.26s gescannt werden?
+
+Antwort: Es wird NICHT komplett gelesen! Nur Metadaten.
+
+═══════════════════════════════════════════════════════════
+ 🔍 ZWEI-PHASEN SCAN-PROZESS
+═══════════════════════════════════════════════════════════
+
+## Phase 1: File Enumeration (SCHNELL)
+───────────────────────────────────────────────────────────
+Was passiert:
+   → Filesystem-Metadaten werden gelesen
+   → Dateinamen, Pfade, Größen gesammelt
+   → Namen-Pattern-Matching angewendet
+   → Kandidaten-Liste erstellt
+
+Was NICHT passiert:
+   ✗ Dateien werden NICHT gelesen
+   ✗ Content wird NICHT durchsucht
+   ✗ Keine Disk-I/O für Dateiinhalte
+
+Dauer: 0.26s für 2934 Dateien
+Daten gelesen: ~1-2 MB (nur Metadaten!)
+
+───────────────────────────────────────────────────────────
+
+## Phase 2: Content Scan (LANGSAM, wenn nötig)
+───────────────────────────────────────────────────────────
+Was passiert:
+   → NUR interessante Dateien werden geöffnet
+   → Content wird gelesen und durchsucht
+   → Regex/YARA-Regeln angewendet
+   → Hits werden gespeichert
+
+Was NICHT passiert:
+   ✗ NICHT alle 2934 Dateien werden gelesen
+   ✗ NICHT alle 238 GB werden durchsucht
+   ✗ Nur Kandidaten werden content-gescannt
+
+Dauer: Variable (abhängig von Kandidaten-Anzahl)
+Daten gelesen: Variable (nur Kandidaten-Dateien)
+
+Bei unserem Scan:
+   → 0 Kandidaten gefunden
+   → Phase 2 wurde ÜBERSPRUNGEN!
+   → Deshalb so schnell: nur Phase 1!
+
+═══════════════════════════════════════════════════════════
+ 📈 BEISPIEL-PERFORMANCE
+═══════════════════════════════════════════════════════════
+
+## Szenario 1: Keine Wallet-Dateien (unser Fall)
+───────────────────────────────────────────────────────────
+Image: 238 GB, 2934 Dateien
+
+Phase 1 (Enumeration):
+   Files found: 2934
+   Kandidaten: 0 (keine wallet.dat, *.json, etc.)
+   Zeit: 0.26s
+   Daten gelesen: ~1-2 MB (Metadaten)
+
+Phase 2 (Content Scan):
+   Kandidaten: 0
+   → ÜBERSPRUNGEN!
+   Zeit: 0s
+   Daten gelesen: 0 MB
+
+Total: 0.26s, ~2 MB gelesen
+Durchsatz: 11,300 Dateien/s (Metadaten)
+
+───────────────────────────────────────────────────────────
+
+## Szenario 2: Wallet-Dateien gefunden
+───────────────────────────────────────────────────────────
+Image: 238 GB, 2934 Dateien
+
+Phase 1 (Enumeration):
+   Files found: 2934
+   Kandidaten: 50 (wallet.dat, keystore-*.json, etc.)
+   Zeit: 0.26s
+   Daten gelesen: ~2 MB (Metadaten)
+
+Phase 2 (Content Scan):
+   Kandidaten: 50
+   Durchschnittl. Größe: 10 MB
+   Zeit: ~15s (parallele Verarbeitung)
+   Daten gelesen: 500 MB (nur Kandidaten!)
+
+Total: 15.26s, 502 MB gelesen
+Durchsatz: ~33 MB/s (Content-Scan)
+
+Wichtig: Nur 502 MB von 238 GB wurden gelesen!
+         Das sind nur 0.2% der Gesamtgröße!
+
+───────────────────────────────────────────────────────────
+
+## Szenario 3: Aggressiver Modus
+───────────────────────────────────────────────────────────
+Image: 238 GB, 2934 Dateien
+
+Phase 1 (Enumeration):
+   Files found: 2934
+   Kandidaten: 1200 (viele potenzielle Dateien)
+   Zeit: 0.26s
+   Daten gelesen: ~2 MB (Metadaten)
+
+Phase 2 (Content Scan):
+   Kandidaten: 1200
+   Filter: Max 512 MB pro Datei
+   Durchschnittl. Größe: 50 MB
+   Threads: 6 parallel
+   Zeit: ~2-10 Minuten (abhängig von Disk-Speed)
+   Daten gelesen: ~60 GB (große Dateien!)
+
+Total: 2-10 Minuten, ~60 GB gelesen
+Durchsatz: ~100-500 MB/s (bei SSD)
+
+Wichtig: Nur 60 GB von 238 GB wurden gelesen!
+         Das sind nur 25% der Gesamtgröße!
+         Rest wurde durch Namen-Filter übersprungen.
+
+═══════════════════════════════════════════════════════════
+ 🎯 NAMEN-PATTERN-MATCHING (PHASE 1)
+═══════════════════════════════════════════════════════════
+
+Was wird als "interessant" erkannt:
+
+## Wallet-Dateien:
+───────────────────────────────────────────────────────────
+  wallet.dat              (Bitcoin Core)
+  wallet                  (Bitcoin Core alt)
+  *.wallet                (Verschiedene)
+  keystore-*.json         (Ethereum)
+  UTC--*                  (Ethereum)
+  *.key                   (Private Keys)
+  *.pem                   (Private Keys)
+  seed.txt                (Seed Phrases)
+  mnemonic.txt            (Seed Phrases)
+  recovery.txt            (Recovery Phrases)
+
+## Konfigurationsdateien:
+───────────────────────────────────────────────────────────
+  bitcoin.conf
+  ethereum.conf
+  config.json             (in Wallet-Ordnern)
+
+## Verzeichnisse:
+───────────────────────────────────────────────────────────
+  .bitcoin/
+  .ethereum/
+  .electrum/
+  AppData/*/Bitcoin/
+  AppData/*/Ethereum/
+
+Wenn KEINES davon gefunden wird:
+   → 0 Kandidaten
+   → Phase 2 wird übersprungen
+   → Extrem schneller Scan!
+
+═══════════════════════════════════════════════════════════
+ 🚀 WARUM SO SCHNELL?
+═══════════════════════════════════════════════════════════
+
+1. Filesystem-Cache:
+   → Linux cached Filesystem-Metadaten
+   → Directory-Struktur ist im RAM
+   → Keine physischen Disk-Reads für Enumeration
+
+2. Effiziente Tools:
+   → ripgrep optimiert für schnelle File-Enumeration
+   → find nutzt Filesystem-Index
+   → Parallele Verarbeitung (6 Threads)
+
+3. Intelligente Filter:
+   → Namen-Pattern reduziert Kandidaten massiv
+   → Nur 0.1-10% aller Dateien werden content-gescannt
+   → Größen-Filter (max 512 MB) überspringt große Dateien
+
+4. Kein unnötiger I/O:
+   → Metadaten sind billig (~1 KB pro Datei)
+   → Content-Reads sind teuer (~MB pro Datei)
+   → Scanner liest nur was nötig ist
+
+═══════════════════════════════════════════════════════════
+ 📊 DATENMENGEN VERGLEICH
+═══════════════════════════════════════════════════════════
+
+Unser Scan (0 Kandidaten):
+────────────────────────────────────────────────────────────
+Image-Größe:      238 GB        (238,000 MB)
+Gelesene Daten:   ~2 MB         (0.0008% !)
+Scan-Zeit:        0.26s
+Durchsatz:        ~8 MB/s       (Metadaten-Read)
+
+Wenn alle Dateien gelesen würden:
+────────────────────────────────────────────────────────────
+Image-Größe:      238 GB        (238,000 MB)
+Zu lesende Daten: 238 GB        (100%)
+Geschätzte Zeit:  ~40-80 Minuten (bei 50-100 MB/s)
+Durchsatz:        50-100 MB/s   (Full-Scan)
+
+Realität vs. Naiver Ansatz:
+────────────────────────────────────────────────────────────
+Naiv: Alle Dateien lesen → 40-80 Minuten
+Smart: Nur Metadaten + Filter → 0.26s
+
+Faktor: 9,230x - 18,460x schneller! 🚀
+
+═══════════════════════════════════════════════════════════
+ 🎓 WICHTIGE ERKENNTNISSE
+═══════════════════════════════════════════════════════════
+
+1. "Scannen" bedeutet NICHT "alles lesen"
+   → Zwei-Phasen-Prozess (Enum + Content)
+   → Intelligente Filter reduzieren I/O massiv
+
+2. Metadaten sind extrem billig
+   → ~1 KB pro Datei (Name, Pfad, Größe)
+   → Filesystem cached Metadaten im RAM
+   → Enumeration ist fast instant
+
+3. Content-Scan ist teuer
+   → MB/GB pro Datei müssen gelesen werden
+   → Wird nur für Kandidaten durchgeführt
+   → Namen-Filter reduziert Last um 90-99%!
+
+4. Performance hängt von Kandidaten ab
+   → Keine Kandidaten: 0.26s
+   → 50 Kandidaten: ~15s
+   → 1200 Kandidaten: 2-10 Minuten
+   → Scanner ist adaptiv!
+
+5. Aggressive Mode ist teurer
+   → Mehr false-positives in Phase 1
+   → Mehr Dateien werden content-gescannt
+   → Längere Scan-Zeit, aber gründlicher
+
+═══════════════════════════════════════════════════════════
+ 📋 FAQ
+═══════════════════════════════════════════════════════════
+
+Q: Warum wurden nicht alle 238 GB durchsucht?
+A: Scanner nutzt intelligente Filter (Namen-Pattern).
+   Nur potenzielle Wallet-Dateien werden gelesen.
+   Bei 0 Kandidaten: nur Metadaten-Scan!
+
+Q: Kann ich erzwingen dass alles gelesen wird?
+A: Ja, mit --aggressive + niedrigem Score-Threshold.
+   Aber: Dauert VIEL länger (Stunden!)
+   Nicht empfohlen für große Images.
+
+Q: Wie weiß ich ob der Scan gründlich war?
+A: Prüfe Kandidaten-Anzahl in Phase 1.
+   0 Kandidaten = keine Wallet-Dateien gefunden.
+   Log zeigt: "files: 2934, hits: 0"
+
+Q: Werden versteckte Dateien übersehen?
+A: Nein! Scanner enumiert ALLE Dateien.
+   Filter basiert auf Namen, nicht Sichtbarkeit.
+   Auch .hidden_wallet.dat wird gefunden!
+
+Q: Was wenn Wallets umbenannt wurden?
+A: Verwende --aggressive Modus.
+   Oder: Content-Scan ohne Namen-Filter.
+   Aber: Deutlich langsamer!
+
+═══════════════════════════════════════════════════════════
+ ✅ ZUSAMMENFASSUNG
+═══════════════════════════════════════════════════════════
+
+238 GB Image in 0.26s gescannt: WIE?
+
+Antwort:
+   → Nur Filesystem-Metadaten (~2 MB) wurden gelesen
+   → Namen-Pattern-Matching identifizierte 0 Kandidaten
+   → Content-Scan wurde übersprungen (keine Kandidaten!)
+   → Deshalb so schnell: Nur Directory-Walk!
+
+Wenn Wallets gefunden worden wären:
+   → Kandidaten-Dateien würden content-gescannt
+   → Scan würde länger dauern (Sekunden bis Minuten)
+   → Aber immer noch NUR Kandidaten, nicht alle 238 GB!
+
+Schlüssel zum Verständnis:
+   → Scanner liest nur was nötig ist
+   → Intelligente Filter = massive I/O-Reduktion
+   → Metadaten-Scan ist fast instant
+   → Content-Scan nur für relevante Dateien
+
+Performance ist kein Zufall - es ist Design! 🚀
+
+═══════════════════════════════════════════════════════════

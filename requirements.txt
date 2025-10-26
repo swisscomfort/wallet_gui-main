@@ -1,0 +1,34 @@
+# Wallet GUI Dependencies
+# Python 3.9+
+
+# GUI Framework (required)
+# Python dependencies for Wallet Scanner GUI
+# Core GUI framework
+PyQt6>=6.4.0
+
+# System packages (install via package manager):
+# Required:
+#   sudo apt install kdialog p7zip p7zip-plugins sleuthkit ntfs-3g
+# 
+# Optional (recommended):
+#   sudo apt install ripgrep yara exfatprogs
+#
+# Development dependencies (install with: pip install -e ".[dev]"):
+# - pytest>=7.0
+# - pytest-qt>=4.0  
+# - black>=22.0
+# - flake8>=4.0
+# - mypy>=0.950
+# - sphinx>=4.0
+# - sphinx-rtd-theme>=1.0
+
+# Optional but recommended
+# ripgrep (system package, not pip) - für schnelle Text-Suche
+# yara-python>=4.2.0 - für YARA-Pattern-Matching (optional)
+# kdialog (system package) - für native KDE-Dialoge
+
+# System packages (nicht via pip):
+# - kdialog (KDE)
+# - p7zip, p7zip-plugins (Archive)
+# - sleuthkit (Forensik)
+# - ntfs-3g (NTFS-Support)

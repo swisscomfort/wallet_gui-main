@@ -1,0 +1,349 @@
+═══════════════════════════════════════════════════════════
+ 🧪 WALLET SCANNER TEST-SUITE
+═══════════════════════════════════════════════════════════
+
+Script: scripts/create_test_wallets.sh
+Zweck: Erstellt realistische Test-Dateien für Wallet-Scanner
+
+═══════════════════════════════════════════════════════════
+ 📦 WAS WIRD ERSTELLT?
+═══════════════════════════════════════════════════════════
+
+## 15 Kategorien von Test-Dateien:
+
+1. **Bitcoin Core Wallets** (2 Dateien)
+   - wallet.dat (klassisches Format)
+   - wallet (neues Format ohne .dat)
+   
+2. **Ethereum Keystores** (2 Dateien)
+   - UTC--* Format
+   - keystore.json
+   
+3. **Seed Phrases** (4 Dateien)
+   - 12-word BIP39
+   - 24-word BIP39
+   - Recovery phrase mit Info
+   - Mnemonic mit Zusatztext
+   
+4. **Electrum Wallets** (1 Datei)
+   - default_wallet (JSON Format)
+   
+5. **Private Keys** (3 Dateien)
+   - WIF Format (Bitcoin)
+   - Hex Format (Ethereum)
+   - PEM Format (RSA)
+   
+6. **Wallet Konfigurationen** (2 Dateien)
+   - bitcoin.conf (mit Private Key)
+   - ethereum_config.json (mit Private Key)
+   
+7. **Browser Extension Data** (1 Datei)
+   - MetaMask vault.json
+   
+8. **Monero Wallets** (1 Datei)
+   - wallet.keys (mit 25-word seed)
+   
+9. **Altcoin Wallets** (2 Dateien)
+   - Litecoin wallet.dat
+   - Dogecoin wallet.dat
+   
+10. **False Positives** (3 Dateien)
+    - not_a_wallet.dat (nur Name, kein Inhalt)
+    - seed_package.txt (Garten-Samen!)
+    - keystore.txt (Schlüsseldienst)
+    
+11. **Deep Nested** (1 Datei)
+    - Versteckte Seed-Datei tief verschachtelt
+    
+12. **Verschiedene Encodings** (2 Dateien)
+    - Base64 encoded seed
+    - Hex encoded private key
+    
+13. **Umbenannte Dateien** (2 Dateien)
+    - my_notes.txt (Wallet getarnt als Notes)
+    - old_wallet.bak (Wallet als Backup)
+    
+14. **Dokumentation** (1 Datei)
+    - README_TEST_SUITE.md
+
+═══════════════════════════════════════════════════════════
+ 🎯 VERWENDUNG
+═══════════════════════════════════════════════════════════
+
+## Test-Suite erstellen:
+
+```bash
+# Standard-Pfad (~/wallet_scanner_test)
+bash scripts/create_test_wallets.sh
+
+# Custom Pfad
+bash scripts/create_test_wallets.sh /tmp/my_test_wallets
+
+# Oder direkt ausführen
+./scripts/create_test_wallets.sh /path/to/test
+```
+
+## Mit GUI scannen:
+
+```bash
+python3 wallet_gui.py
+
+# In der GUI:
+ROOT: /tmp/wallet_test_suite
+TARGET: /tmp/wallet_test_suite (oder als Ordner hinzufügen)
+Scanner: hrm_swarm_scanner_wrapper.sh (empfohlen)
+Optionen: Standard (kein Root nötig, keine Images)
+```
+
+## CLI-Scan (Standalone):
+
+```bash
+python3 standalone/hrm_swarm_scanner.py \
+  --root /tmp/wallet_test_suite \
+  --target /tmp/wallet_test_suite \
+  --threads 4 \
+  --prefer-rg
+```
+
+═══════════════════════════════════════════════════════════
+ ✅ ERWARTETE ERGEBNISSE
+═══════════════════════════════════════════════════════════
+
+## Sollten erkannt werden (~19 Dateien):
+
+✓ bitcoin_core/.bitcoin/wallet.dat
+✓ bitcoin_core/.bitcoin/wallet
+✓ ethereum/.ethereum/keystore/UTC--*
+✓ ethereum/.ethereum/keystore.json
+✓ seeds/seed_12_words.txt
+✓ seeds/seed_24_words.txt
+✓ seeds/recovery_phrase.txt
+✓ seeds/mnemonic.txt
+✓ electrum/.electrum/wallets/default_wallet
+✓ private_keys/bitcoin_private.key
+✓ private_keys/ethereum_private.key
+✓ configs/bitcoin.conf
+✓ configs/ethereum_config.json
+✓ browser_data/metamask/vault.json
+✓ monero/.bitmonero/wallet.keys
+✓ altcoins/.litecoin/wallet.dat
+✓ altcoins/.dogecoin/wallet.dat
+✓ deep/nested/hidden/backup/.wallets/.secret_seed
+✓ renamed/my_notes.txt
+
+## Sollten NICHT erkannt werden (False Positives):
+
+✗ false_positives/not_a_wallet.dat
+✗ false_positives/seed_package.txt
+✗ false_positives/keystore.txt
+
+## Performance:
+
+- File Enumeration: ~0.01s (27 Dateien)
+- Content Scan: ~0.1-0.5s (19 Kandidaten)
+- Total: ~0.2-1s
+
+═══════════════════════════════════════════════════════════
+ 🧪 TEST-SZENARIEN
+═══════════════════════════════════════════════════════════
+
+## 1. Basis-Test (Standard Mode)
+
+Ziel: Prüfe ob Scanner alle Standard-Wallets findet
+
+```bash
+python3 wallet_gui.py
+ROOT: /tmp/wallet_test_suite
+TARGET: /tmp/wallet_test_suite
+Scanner: hrm_swarm_scanner_wrapper.sh
+Optionen: Keine Checkboxen
+
+Erwartung: ~15-19 Hits
+```
+
+## 2. Aggressive Mode
+
+Ziel: Teste aggressive Suche (mehr False Positives)
+
+```bash
+python3 wallet_gui.py
+☑ Aggressiv aktivieren
+
+Erwartung: 19-25 Hits (inkl. False Positives)
+```
+
+## 3. Performance-Test
+
+Ziel: Messe Scan-Geschwindigkeit
+
+```bash
+time python3 standalone/hrm_swarm_scanner.py \
+  --root /tmp/wallet_test_suite \
+  --target /tmp/wallet_test_suite
+
+Erwartung: <1 Sekunde für volle Suite
+```
+
+## 4. Content-Filter Test
+
+Ziel: Prüfe ob False Positives herausgefiltert werden
+
+```bash
+# Nach Scan prüfen:
+grep -l "not_a_wallet.dat" /tmp/wallet_test_suite/_logs/*/hits.txt
+grep -l "seed_package.txt" /tmp/wallet_test_suite/_logs/*/hits.txt
+
+Erwartung: Keine Treffer (erfolgreich gefiltert!)
+```
+
+## 5. Deep-Nesting Test
+
+Ziel: Finde versteckte Wallets in tiefer Struktur
+
+```bash
+# Prüfe ob gefunden:
+grep -r "deep/nested/hidden" /tmp/wallet_test_suite/_logs/*/hits.txt
+
+Erwartung: .secret_seed sollte gefunden werden
+```
+
+═══════════════════════════════════════════════════════════
+ 📊 VALIDIERUNG
+═══════════════════════════════════════════════════════════
+
+Nach dem Scan prüfen:
+
+```bash
+# Alle Treffer anzeigen
+cat /tmp/wallet_test_suite/_logs/walletscan_*/hits.txt
+
+# Anzahl Treffer zählen
+wc -l /tmp/wallet_test_suite/_logs/walletscan_*/hits.txt
+
+# Sollte ~19 sein (ohne Aggressive Mode)
+
+# Mnemonics prüfen
+cat /tmp/wallet_test_suite/_logs/walletscan_*/mnemonic_raw.txt
+
+# Sollte mindestens 5 Seed Phrases enthalten:
+# - abandon abandon ... (12 words)
+# - abandon abandon ... (24 words)
+# - witch collapse ... (12 words)
+# - army van defense ... (12 words)
+# - abbey abbey ... (25 words, Monero)
+
+# Summary ansehen
+cat /tmp/wallet_test_suite/_logs/walletscan_*/summary.json
+```
+
+═══════════════════════════════════════════════════════════
+ ⚠️ WICHTIG: NUR TEST-DATEN!
+═══════════════════════════════════════════════════════════
+
+**ALLE Keys, Seeds und Adressen sind GEFÄLSCHT!**
+
+✗ Keine echten Private Keys
+✗ Keine echten Seed Phrases  
+✗ Keine echten Wallet-Daten
+✗ NICHT für echte Wallets verwenden!
+
+✓ Nur für Testing und Entwicklung
+✓ Kann beliebig oft neu generiert werden
+✓ Sicher zum Teilen (keine echten Secrets)
+
+═══════════════════════════════════════════════════════════
+ 🎓 LERNZIELE
+═══════════════════════════════════════════════════════════
+
+Diese Test-Suite hilft beim Verstehen von:
+
+1. **Wallet-Dateiformate**
+   - Verschiedene Krypto-Wallets nutzen verschiedene Formate
+   - Namen-Pattern sind wichtig (wallet.dat, UTC--, etc.)
+   
+2. **Content-Filtering**
+   - Nicht jede "wallet.dat" ist ein Wallet
+   - Content-Scan ist essentiell für Genauigkeit
+   
+3. **Scanner-Performance**
+   - Enumeration vs. Content-Scan
+   - Intelligente Filter reduzieren False Positives
+   
+4. **Edge Cases**
+   - Versteckte Dateien (deep nesting)
+   - Umbenannte Dateien (my_notes.txt)
+   - Verschiedene Encodings (base64, hex)
+
+═══════════════════════════════════════════════════════════
+ 🔧 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════
+
+## Problem: Zu wenig Treffer
+
+Mögliche Ursachen:
+- Content-Filter zu streng
+- Scanner überspringt bestimmte Dateitypen
+- Namen-Pattern zu restriktiv
+
+Lösung:
+- Aggressive Mode aktivieren
+- --max-mb erhöhen
+- Logs prüfen: Welche Dateien wurden übersprungen?
+
+## Problem: Zu viele False Positives
+
+Mögliche Ursachen:
+- Aggressive Mode aktiviert
+- Content-Filter zu locker
+- Score-Threshold zu niedrig
+
+Lösung:
+- Aggressive Mode deaktivieren
+- Content-Pattern in Scanner anpassen
+- Score-Threshold erhöhen
+
+## Problem: Performance zu langsam
+
+Mögliche Ursachen:
+- Zu viele Threads (Context-Switching)
+- Langsame Disk (HDD statt SSD)
+- Zu große Max-Dateigröße
+
+Lösung:
+- Threads reduzieren (4-6 optimal)
+- Test-Suite auf SSD verschieben
+- --max-mb auf 256-512 begrenzen
+
+═══════════════════════════════════════════════════════════
+ 📚 ZUSÄTZLICHE RESSOURCEN
+═══════════════════════════════════════════════════════════
+
+- README_TEST_SUITE.md (in Test-Verzeichnis)
+- docs/SCANNER_PERFORMANCE_EXPLAINED.txt
+- docs/COMPLETE_IMAGE_SCAN_SUCCESS.txt
+
+═══════════════════════════════════════════════════════════
+ ✅ ZUSAMMENFASSUNG
+═══════════════════════════════════════════════════════════
+
+Test-Suite enthält:
+- 27 Dateien
+- 15 Kategorien
+- ~19 echte Wallet-Kandidaten
+- 3 False Positives (zum Testen)
+- Vollständige Dokumentation
+
+Verwendung:
+1. bash scripts/create_test_wallets.sh [pfad]
+2. Scanner auf Test-Verzeichnis laufen lassen
+3. Ergebnisse validieren (~19 Hits erwartet)
+
+Vorteile:
+✓ Realistische Test-Daten
+✓ Verschiedene Wallet-Typen
+✓ Performance-Benchmarking
+✓ Regression-Testing
+✓ Scanner-Entwicklung
+✓ Sicher (keine echten Keys!)
+
+═══════════════════════════════════════════════════════════

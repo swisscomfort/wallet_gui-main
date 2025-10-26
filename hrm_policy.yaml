@@ -1,0 +1,21 @@
+# hrm_policy.yaml — einfache Regeln für den "Human Reasoning Model" Controller
+# Idee: starte schnell (Enum+Content), eskaliere selektiv je nach Yield.
+initial:
+  agents: [file_enum, content_scan]
+  params:
+    max_mb: 256
+    threads: 6
+    prefer_rg: true
+
+escalation_rules:
+  - if: "hits_per_min > 10 and avg_score >= 6"
+    then:
+      add_agents: [yara_scan, mnemonic_validate]
+      params:
+        rules: "rules/wallet_rules.yar"
+        threads: 6
+  - if: "hits_per_min < 2"
+    then:
+      params:
+        max_mb: 512   # größeres Fenster
+        threads: 10   # mehr Parallelität

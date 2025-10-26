@@ -1,0 +1,118 @@
+═══════════════════════════════════════════════════════════
+ ⚠️ WICHTIGER HINWEIS: PKEXEC FÜR NORMALE VERZEICHNISSE
+═══════════════════════════════════════════════════════════
+
+Problem gefunden: pkexec für normale Verzeichnisse führt zu Permission-Problemen!
+
+═══════════════════════════════════════════════════════════
+ 🐛 BUG: Permission Error bei pkexec
+═══════════════════════════════════════════════════════════
+
+Wenn pkexec für NORMALE VERZEICHNISSE verwendet wird:
+
+1. Scanner läuft als root
+2. Erstellt Log-Verzeichnisse als root (owned by root)
+3. Kann nicht mehr schreiben (Permission denied)
+4. Scanner hängt/schlägt fehl
+
+Fehler:
+   PermissionError: [Errno 13] Permission denied:  
+   '/tmp/wallet_test_suite/_logs/hrm_swarm_...'
+
+═══════════════════════════════════════════════════════════
+ ✅ LÖSUNG: pkexec NUR FÜR IMAGES/DEVICES
+═══════════════════════════════════════════════════════════
+
+RICHTIGE Verwendung von "Mit Root (pkexec)":
+
+✅ AKTIVIEREN für:
+   - Images (.img, .iso, .dd)
+   - Devices (/dev/sdX)
+   - Gemountete Read-Only Partitionen
+
+❌ DEAKTIVIEREN für:
+   - Normale Verzeichnisse
+   - Home-Verzeichnisse  
+   - Test-Suites
+   - Temp-Verzeichnisse (/tmp)
+
+═══════════════════════════════════════════════════════════
+ 🎯 KORREKTE KONFIGURATION FÜR TEST-SUITE
+═══════════════════════════════════════════════════════════
+
+Für /tmp/wallet_test_suite:
+
+ROOT:    /tmp/wallet_test_suite
+TARGET:  /tmp/wallet_test_suite
+
+Optionen:
+  ☐ Aggressiv
+  ☐ Staging anlegen
+  ☐ Mit Root (pkexec) für Auto-Mount      ← DEAKTIVIERT!
+  ☐ Auto-Mount für Images/Devices         ← DEAKTIVIERT!
+
+Scanner:  hrm_swarm_scanner_wrapper.sh
+
+Resultat:
+  - Läuft als normaler User (emil)
+  - Keine Permission-Probleme
+  - Logs gehören emil:emil
+  - Scanner funktioniert einwandfrei
+
+═══════════════════════════════════════════════════════════
+ 📊 TEST-ERGEBNISSE (CLI ohne pkexec)
+═══════════════════════════════════════════════════════════
+
+Command:
+   python3 standalone/hrm_swarm_scanner.py \
+     --root /tmp/wallet_test_suite \
+     --target /tmp/wallet_test_suite \
+     --threads 4 --max-mb 512 --prefer-rg
+
+Ergebnis:
+   ✓ Elapsed: 0.07s
+   ✓ Files: 28
+   ✓ Hits: 10
+   ✓ Average Score: 10.4
+
+Note: Hits sind hauptsächlich im Generator-Script selbst
+      (create_test_wallets.sh), nicht in generierten Dateien.
+      Dies ist ein erwartetes Verhalten - das Script enthält
+      alle Test-Keys und Seeds als String-Literals!
+
+═══════════════════════════════════════════════════════════
+ 🔧 FEHLERBEHEBUNG
+═══════════════════════════════════════════════════════════
+
+Falls Permission-Fehler bereits aufgetreten:
+
+1. Stoppe alle Scanner:
+   sudo pkill -9 -f hrm_swarm_scanner.py
+
+2. Fixe Berechtigungen:
+   sudo chown -R $USER:$USER /path/to/logs/
+
+3. Lösche root-owned Logs (optional):
+   sudo rm -rf /path/to/logs/walletscan_*
+
+4. Scanner neu starten OHNE pkexec
+
+═══════════════════════════════════════════════════════════
+ ✅ ZUSAMMENFASSUNG
+═══════════════════════════════════════════════════════════
+
+pkexec-Checkbox:
+   → NUR für Images/Devices aktivieren!
+   → NICHT für normale Verzeichnisse
+   → Verhindert Permission-Probleme
+
+Test-Suite Scan:
+   → Ohne pkexec: Funktioniert ✓
+   → Mit pkexec: Permission Error ✗
+   
+Lesson Learned:
+   → Root-Rechte sind nicht immer besser
+   → Nur verwenden wenn wirklich nötig
+   → Normale Verzeichnisse brauchen kein root
+
+═══════════════════════════════════════════════════════════

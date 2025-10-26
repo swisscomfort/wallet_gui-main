@@ -1,0 +1,160 @@
+═══════════════════════════════════════════════════════════
+ ✅ ANLEITUNG INTEGRIERT & HILFE-BUTTON ENTFERNT
+═══════════════════════════════════════════════════════════
+
+🎯 ÄNDERUNGEN:
+
+1️⃣  HILFE-BUTTON ENTFERNT
+   ❌ "📖 Hilfe" Button entfernt
+   ❌ open_interactive_help() Funktion entfernt
+   ✓ UI ist aufgeräumter
+   
+2️⃣  AUSFÜHRLICHE ANLEITUNG IM TAB
+   ✅ "Anleitung" Tab jetzt mit KOMPLETTER Dokumentation
+   ✅ Plain-Text (kein HTML)
+   ✅ Alle 30+ GUI-Elemente erklärt
+   ✅ Workflow-Beispiele
+   ✅ Tipps & Tricks
+
+═══════════════════════════════════════════════════════════
+ 📋 INHALT DER NEUEN ANLEITUNG
+═══════════════════════════════════════════════════════════
+
+📂 HAUPTKONFIGURATION
+   • ROOT-Feld & Button erklärt
+   • Scanner-Dropdown erklärt
+   • Eigener Scanner Button erklärt
+
+🎯 TARGET-LISTE & MANAGEMENT
+   • Liste-Funktionalität
+   • "Ordner hinzufügen" - Wann nutzen, Scanner-Verhalten
+   • "Datei/Abbild hinzufügen" - WICHTIG für große Images!
+   • "Device hinzufügen" - Für /dev/sdX
+   • "Auswahl entfernen" & "Liste leeren"
+
+⚙️ OPTIONEN (Checkboxen)
+   • Aggressiv - Vor-/Nachteile
+   • Staging anlegen - Symlinks
+   • Mit Root (pkexec) - WICHTIG für Images!
+   • Auto-Mount - WICHTIG für Images!
+
+🔵 UTILITY-BUTTONS
+   • ROOT in Dolphin
+   • Staging öffnen
+   • Logs öffnen
+
+🚀 ACTION-BUTTONS
+   • Scan starten - Workflow
+   • Stop - Abbrechen
+
+📊 TABS
+   • Live-Log
+   • Hits (mit Filter/Export)
+   • Mnemonics
+   • Anleitung
+
+🎯 WORKFLOW-BEISPIEL
+   Komplettes Beispiel: 233 GB .img Datei scannen
+   ❌ FALSCH vs ✅ RICHTIG
+
+🔧 DATEIGRÖSSEN-LIMITS
+   Normal: 512 MB
+   Aggressiv: 1024 MB
+   Images: KEIN Limit!
+
+📋 DATEITYPEN
+   Welche Dateien werden gescannt?
+   Content-Scan vs Auto-Mount
+
+💡 TIPPS & TRICKS
+   • Für große Images
+   • Für Devices
+   • Für Archive
+   • Performance
+   • Nach dem Scan
+
+📦 EMPFOHLENE PAKETE
+   Liste aller Dependencies
+
+✅ ZUSAMMENFASSUNG
+   Quick-Start-Guide
+
+═══════════════════════════════════════════════════════════
+ 🎨 FORMATIERUNG
+═══════════════════════════════════════════════════════════
+
+• Plain-Text mit Unicode-Boxen (╔══╗ ║ ╚══╝)
+• Übersichtliche Strukturierung
+• Emojis für schnelle Orientierung:
+  🔹 = Button/Element
+  ✅ = Richtig/Gut
+  ❌ = Falsch/Schlecht
+  ⚠️ = Wichtig/Achtung
+  💡 = Tipp
+  
+• Lesbar auch ohne Syntax-Highlighting
+• Scrollbar für lange Texte
+• Zeilenwrap für bessere Lesbarkeit
+
+═══════════════════════════════════════════════════════════
+ 📏 UMFANG
+═══════════════════════════════════════════════════════════
+
+Zeilen: ~380 Zeilen ausführliche Dokumentation
+Bereiche: 11 Hauptbereiche
+Elemente erklärt: 30+ Buttons/Checkboxen/Tabs
+Beispiele: 3 komplette Workflows
+Tipps: 15+ praktische Hinweise
+
+═══════════════════════════════════════════════════════════
+ ✅ VORTEILE
+═══════════════════════════════════════════════════════════
+
+🚀 Kein externer Browser nötig
+   Alles in der App
+
+🚀 Immer verfügbar
+   Keine fehlenden HTML-Dateien mehr
+
+🚀 Sofort sichtbar
+   Einfach "Anleitung" Tab öffnen
+
+🚀 Komplett & Aktuell
+   Alle Features dokumentiert
+
+🚀 Workflow-orientiert
+   Konkrete Beispiele statt Theorie
+
+🚀 Fehlervermeidung
+   Warnt vor häufigen Fehlern
+   (z.B. Ordner statt Datei bei großen Images)
+
+═══════════════════════════════════════════════════════════
+ 🧪 STATUS
+═══════════════════════════════════════════════════════════
+
+✅ Hilfe-Button entfernt
+✅ open_interactive_help() entfernt
+✅ Ausführliche Anleitung im Tab
+✅ Syntax-Warnung gefixt (wallet\\.dat)
+✅ GUI läuft (PID in terminal 1cb7cca1...)
+✅ Bereit zum Testen!
+
+═══════════════════════════════════════════════════════════
+ 📚 DATEIEN
+═══════════════════════════════════════════════════════════
+
+Geändert:
+  • wallet_gui.py
+    - Hilfe-Button entfernt (Zeile 99-105)
+    - Anleitung-Tab ersetzt (Zeile 139-598)
+    - open_interactive_help() entfernt (Zeile 1082-1106)
+
+Dokumentation:
+  • GUI_ELEMENTS_EXPLAINED.md (Referenz)
+  • IMAGE_SCANNING_SOLUTION.txt (Spezial-Fall)
+  • SCANNER_FILE_HANDLING.md (Technisch)
+
+═══════════════════════════════════════════════════════════
+
+PERFEKT! Anleitung jetzt komplett in GUI integriert! 🎉

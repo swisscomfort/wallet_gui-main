@@ -1,0 +1,233 @@
+═══════════════════════════════════════════════════════════
+ ⚠️ FEHLER: ROOT-Verzeichnis nicht beschreibbar
+═══════════════════════════════════════════════════════════
+
+🔴 FEHLER:
+   mkdir: Verzeichnis »»/run/media/emil/DATEN«« konnte nicht angelegt werden
+   : Keine Berechtigung
+
+🎯 URSACHE:
+   Scanner versucht Unterverzeichnisse in ROOT zu erstellen:
+   - _mount/     (für Auto-Mount Mountpoints)
+   - _logs/      (für Scan-Ergebnisse)
+   
+   Aber ROOT ist nicht beschreibbar!
+
+═══════════════════════════════════════════════════════════
+ 📋 ROOT-VERZEICHNIS VERSTEHEN
+═══════════════════════════════════════════════════════════
+
+Was ist ROOT?
+   → Arbeitsverzeichnis des Scanners
+   → Hier werden _mount/ und _logs/ erstellt
+   → MUSS schreibbar sein!
+
+Was ist ROOT NICHT?
+   → NICHT das Scan-Ziel selbst
+   → NICHT die gemountete Partition
+   → NICHT das Image/Device
+
+Beispiel:
+   ROOT:   /mnt/mediacenter1/sido  ← Schreibbar ✓
+   TARGET: /run/media/emil/DATEN   ← Scan-Ziel
+   IMAGE:  /mnt/.../volume.img     ← Zu scannendes Image
+
+═══════════════════════════════════════════════════════════
+ ✅ LÖSUNG 1: Beschreibbares ROOT verwenden
+═══════════════════════════════════════════════════════════
+
+EMPFOHLEN: Verwende HOME-Verzeichnis oder eigene Partition
+
+Gute ROOT-Verzeichnisse:
+   ✓ /home/emil/wallet_scans
+   ✓ /mnt/mediacenter1/sido
+   ✓ /tmp/wallet_work
+   ✓ ~/scans
+
+Schlechte ROOT-Verzeichnisse:
+   ✗ /run/media/emil/DATEN     (System-Mount, oft read-only)
+   ✗ /mnt/irgendwas            (wenn nicht beschreibbar)
+   ✗ /media/...                (System-managed)
+   ✗ /                         (System-Root!)
+
+═══════════════════════════════════════════════════════════
+ ✅ LÖSUNG 2: Mit Root (pkexec) aktivieren
+═══════════════════════════════════════════════════════════
+
+Wenn du WIRKLICH /run/media/... als ROOT brauchst:
+
+1. GUI: ☑ "Mit Root (pkexec) für Auto-Mount" aktivieren
+   
+2. Scanner läuft als Root
+   → Kann in /run/media/ schreiben
+   → Kann _mount/ und _logs/ erstellen
+
+ABER: Nicht empfohlen! Besser eigenes ROOT-Verzeichnis.
+
+═══════════════════════════════════════════════════════════
+ 🎯 DEINE SITUATION
+═══════════════════════════════════════════════════════════
+
+Aktuell:
+   ROOT:   /run/media/emil/DATEN  ← Nicht beschreibbar!
+   TARGET: /mnt/mediacenter1/sido
+   IMAGE:  /mnt/.../volume_disk_2025-10-06-1346.img
+
+Problem:
+   Scanner kann in /run/media/emil/DATEN nicht schreiben
+
+═══════════════════════════════════════════════════════════
+ ✅ EMPFOHLENE KONFIGURATION
+═══════════════════════════════════════════════════════════
+
+Option A: /mnt/mediacenter1/sido als ROOT
+────────────────────────────────────────────────────────────
+ROOT:   /mnt/mediacenter1/sido  ← Beschreibbar!
+TARGET: /run/media/emil/DATEN   ← Scan-Ziel
+IMAGE:  /mnt/.../volume_disk_2025-10-06-1346.img
+
+Ergebnis:
+   _mount/ → /mnt/mediacenter1/sido/_mount/
+   _logs/  → /mnt/mediacenter1/sido/_logs/
+   
+Funktioniert? ✓ JA!
+
+────────────────────────────────────────────────────────────
+
+Option B: HOME-Verzeichnis als ROOT
+────────────────────────────────────────────────────────────
+ROOT:   /home/emil/wallet_scans  ← Immer beschreibbar!
+TARGET: /run/media/emil/DATEN
+IMAGE:  /mnt/.../volume_disk_2025-10-06-1346.img
+
+Ergebnis:
+   _mount/ → /home/emil/wallet_scans/_mount/
+   _logs/  → /home/emil/wallet_scans/_logs/
+   
+Funktioniert? ✓ JA!
+
+────────────────────────────────────────────────────────────
+
+Option C: Mit Root-Rechten (nicht empfohlen)
+────────────────────────────────────────────────────────────
+ROOT:   /run/media/emil/DATEN
+☑ Mit Root (pkexec) für Auto-Mount
+
+Funktioniert? ✓ JA (aber overkill!)
+
+═══════════════════════════════════════════════════════════
+ 🔧 SCHRITT-FÜR-SCHRITT FIX
+═══════════════════════════════════════════════════════════
+
+1. In der GUI: 🔍 FSearch öffnen für ROOT
+
+2. Wähle beschreibbares Verzeichnis:
+   → /mnt/mediacenter1/sido (du hast schon Zugriff!)
+   → ODER ~/wallet_scans erstellen
+   
+3. ROOT gesetzt: /mnt/mediacenter1/sido ✓
+
+4. Targets hinzufügen:
+   □ Ordner hinzufügen: /run/media/emil/DATEN
+   □ Datei hinzufügen: /mnt/.../volume_disk_2025-10-06-1346.img
+   
+5. Optionen:
+   ☑ Auto-Mount für Images/Devices
+   ☑ Mit Root (pkexec) für Auto-Mount ← Für .img Dateien!
+   
+6. Scanner starten → Funktioniert! ✓
+
+═══════════════════════════════════════════════════════════
+ 📊 VERZEICHNIS-STRUKTUR (NACH SCAN)
+═══════════════════════════════════════════════════════════
+
+/mnt/mediacenter1/sido/                    ← ROOT (beschreibbar)
+├── _mount/                                ← Auto-Mount Mountpoints
+│   └── hrm_scan_1234567/
+│       └── volume_disk_..._img_p0/        ← Gemountetes Image
+├── _logs/                                 ← Scan-Ergebnisse
+│   ├── walletscan_20251007_123456/
+│   │   ├── hits.txt
+│   │   ├── mnemonic_raw.txt
+│   │   └── summary.json
+│   └── hrm_swarm_1759804096/
+│       └── ...
+└── volume_disk_2025-10-06-1346.img       ← Original-Image
+
+/run/media/emil/DATEN/                     ← TARGET (read-only ok!)
+├── [Dateien werden gescannt]
+└── [Keine _mount/ oder _logs/ hier!]
+
+═══════════════════════════════════════════════════════════
+ 🎓 WICHTIGE KONZEPTE
+═══════════════════════════════════════════════════════════
+
+ROOT (Arbeitsverzeichnis):
+   → Wo _mount/ und _logs/ erstellt werden
+   → MUSS schreibbar sein!
+   → Kann irgendwo sein (HOME, eigene Partition, etc.)
+
+TARGET (Scan-Ziel):
+   → Was gescannt wird
+   → Kann read-only sein
+   → Kann gemountete Partition sein
+   → Kann auch ROOT sein (aber nicht muss!)
+
+IMAGE/DEVICE:
+   → Wird mit Auto-Mount gemountet
+   → Mountpoint unter ROOT/_mount/
+   → Dann als TARGET gescannt
+
+═══════════════════════════════════════════════════════════
+ ⚠️ HÄUFIGE FEHLER
+═══════════════════════════════════════════════════════════
+
+FEHLER 1: System-Mount als ROOT
+   ✗ ROOT: /run/media/emil/DATEN
+   → Oft nicht beschreibbar
+   → Scanner schlägt fehl
+
+   ✓ FIX: Eigenes ROOT verwenden
+   → ROOT: /home/emil/wallet_scans
+   → TARGET: /run/media/emil/DATEN
+
+────────────────────────────────────────────────────────────
+
+FEHLER 2: ROOT = TARGET verwechselt
+   ✗ Denkt: "Ich will /run/media/... scannen, also ROOT=/run/media/..."
+   → Falsch! ROOT ist nur Arbeitsverzeichnis!
+
+   ✓ FIX: Trennen
+   → ROOT: /mnt/mediacenter1/sido (Arbeit)
+   → TARGET: /run/media/emil/DATEN (Scan)
+
+────────────────────────────────────────────────────────────
+
+FEHLER 3: Vergessen dass ROOT schreibbar sein muss
+   ✗ ROOT: /media/readonly
+   → mkdir schlägt fehl
+
+   ✓ FIX: Test vor Scan
+   $ touch /mein/root/test && rm /mein/root/test
+   → Wenn erfolgreich: ROOT ist ok!
+
+═══════════════════════════════════════════════════════════
+ ✅ ZUSAMMENFASSUNG
+═══════════════════════════════════════════════════════════
+
+Problem: ROOT nicht beschreibbar
+Ursache: /run/media/... ist System-Mount
+Lösung: Beschreibbares ROOT verwenden
+
+EMPFEHLUNG:
+   ROOT:   /mnt/mediacenter1/sido
+   TARGET: /run/media/emil/DATEN (oder andere)
+   IMAGE:  /mnt/.../volume_disk_2025-10-06-1346.img
+   
+   Optionen:
+   ☑ Auto-Mount für Images/Devices
+   ☑ Mit Root (pkexec) für Auto-Mount
+
+Resultat: Alles funktioniert! ✓
+
+═══════════════════════════════════════════════════════════

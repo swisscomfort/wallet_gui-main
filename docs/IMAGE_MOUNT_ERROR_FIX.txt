@@ -1,0 +1,187 @@
+═══════════════════════════════════════════════════════════
+ ⚠️ FEHLERDIAGNOSE: IMAGE-MOUNT FEHLGESCHLAGEN
+═══════════════════════════════════════════════════════════
+
+🔴 FEHLER:
+   losetup: failed to set up loop device
+   : Datei oder Verzeichnis nicht gefunden
+   ✗ Konnte Loop-Device nicht erstellen
+
+🎯 URSACHE:
+   **KEINE ROOT-RECHTE!**
+   
+   Der Scanner benötigt sudo/root um:
+   • Loop-Devices zu erstellen (losetup)
+   • Images zu mounten (mount)
+   • Devices zu mounten (/dev/sdX)
+
+═══════════════════════════════════════════════════════════
+ ✅ LÖSUNG
+═══════════════════════════════════════════════════════════
+
+IN DER GUI:
+
+1. ☑ "Mit Root (pkexec) für Auto-Mount" AKTIVIEREN!
+   
+2. Scan erneut starten
+   
+3. Passwort eingeben (pkexec-Dialog erscheint!)
+   
+4. Scanner läuft jetzt mit Root-Rechten
+   → losetup funktioniert
+   → Image wird gemountet
+   → Inhalt wird gescannt
+
+═══════════════════════════════════════════════════════════
+ 🔧 WARUM IST DAS NÖTIG?
+═══════════════════════════════════════════════════════════
+
+Loop-Device-Erstellung:
+   $ losetup /dev/loop0 image.img
+   → Braucht root (privileged operation)
+
+Mount-Operation:
+   $ mount /dev/loop0 /mnt/point
+   → Braucht root (nur root darf mounten)
+
+Device-Zugriff:
+   $ mount /dev/sdb1 /mnt/point
+   → Braucht root (Blockdevice-Zugriff)
+
+═══════════════════════════════════════════════════════════
+ 🧪 TEST: PRÜFE ROOT-RECHTE
+═══════════════════════════════════════════════════════════
+
+Ohne Root:
+   $ losetup /dev/loop0 test.img
+   losetup: /dev/loop0: Permission denied  ← FEHLER!
+
+Mit Root (pkexec):
+   $ pkexec losetup /dev/loop0 test.img
+   [Passwort-Dialog]
+   → Erfolg! ✓
+
+═══════════════════════════════════════════════════════════
+ 📋 DEINE SITUATION
+═══════════════════════════════════════════════════════════
+
+Datei: volume_disk_2025-10-06-1346.img (238 GB)
+ROOT: /mnt/mediacenter1/sido
+Scanner: wallet_harvest_any.sh (dann hrm_swarm_scanner_wrapper.sh)
+
+Beide Versuche gescheitert mit:
+   ✗ "failed to set up loop device"
+   ✗ "Konnte Loop-Device nicht erstellen"
+
+Grund: Checkbox "Mit Root" war NICHT aktiviert!
+
+═══════════════════════════════════════════════════════════
+ ✅ SCHRITT-FÜR-SCHRITT FIX
+═══════════════════════════════════════════════════════════
+
+1. GUI öffnen (falls nicht schon offen)
+
+2. Prüfe aktuelle Einstellungen:
+   ☐ Aggressiv
+   ☐ Staging anlegen (Symlinks)
+   ☐ Mit Root (pkexec) für Auto-Mount  ← MUSS ☑ SEIN!
+   ☑ Auto-Mount für Images/Devices
+
+3. Aktiviere "Mit Root (pkexec)":
+   ☑ Mit Root (pkexec) für Auto-Mount  ← JETZT AKTIVIERT!
+
+4. Scan erneut starten
+
+5. Passwort-Dialog erscheint:
+   [pkexec Password Dialog]
+   Password: ********
+   [OK]
+
+6. Scanner läuft mit Root:
+   >> mount-versuch: volume_disk_2025-10-06-1346.img
+   ✓ Loop-Device erstellt: /dev/loop0
+   ✓ Mounten: /dev/loop0 → /mnt/.../autoscan_XX
+   ✓ Scanning...
+
+═══════════════════════════════════════════════════════════
+ 🎯 WICHTIG: ROOT-CHECKBOX ERKLÄRT
+═══════════════════════════════════════════════════════════
+
+Checkbox-Name:
+   "Mit Root (pkexec) für Auto-Mount"
+
+Was macht sie:
+   → Startet Scanner mit: pkexec <scanner> <args>
+   → Passwort-Dialog erscheint
+   → Scanner läuft mit Root-Rechten
+   → losetup/mount funktionieren
+   → Auto-Mount für Images/Devices möglich
+
+Wann AKTIVIEREN:
+   ✅ Images scannen (.img, .iso, .dd)
+   ✅ Devices scannen (/dev/sdX)
+   ✅ Geschützte Dateien lesen
+   ✅ Auto-Mount nutzen
+
+Wann NICHT aktivieren:
+   ❌ Nur Ordner scannen (bereits gemountet)
+   ❌ Keine Images/Devices
+   ❌ Sicherheitsbedenken
+
+═══════════════════════════════════════════════════════════
+ 🔒 SICHERHEIT
+═══════════════════════════════════════════════════════════
+
+pkexec ist sicher:
+   ✓ Offizielles PolicyKit-Tool
+   ✓ Passwort-Abfrage (nicht gespeichert!)
+   ✓ Nur für diese Operation
+   ✓ Kein sudo-Missbrauch möglich
+
+Scanner-Verhalten:
+   ✓ Read-only Mounts (keine Schreibzugriffe!)
+   ✓ Automatisches Cleanup (unmount + losetup -d)
+   ✓ Keine Systemänderungen
+   ✓ Keine Daten-Modifikation
+
+═══════════════════════════════════════════════════════════
+ 📊 ERWARTETES VERHALTEN (MIT ROOT)
+═══════════════════════════════════════════════════════════
+
+== Starte ==
+/home/emil/.local/share/wallet-gui/scripts/hrm_swarm_scanner_wrapper.sh \
+  /mnt/mediacenter1/sido --auto-mount \
+  /mnt/mediacenter1/sido/volume_disk_2025-10-06-1346.img
+
+>>> Auto-Mount aktiviert, verarbeite Targets...
+  → Auto-Mount Image: volume_disk_2025-10-06-1346.img
+    ✓ Loop-Device erstellt: /dev/loop0
+    ✓ Mounten: /dev/loop0 → /tmp/wallet_mount_XX/
+    ✓ Scanning /tmp/wallet_mount_XX/
+    
+>>> Scanning...
+Enumeriere Dateien...
+Content-Scan läuft...
+[Fortschritt...]
+
+>>> Cleanup
+    ✓ Unmount /tmp/wallet_mount_XX/
+    ✓ losetup -d /dev/loop0
+    
+== Fertig ==
+Ergebnisse: /mnt/mediacenter1/sido/_logs/walletscan_YYYYMMDD_HHMMSS/
+
+═══════════════════════════════════════════════════════════
+ ✅ ZUSAMMENFASSUNG
+═══════════════════════════════════════════════════════════
+
+Problem: Image-Mount schlägt fehl
+Ursache: Keine Root-Rechte (Checkbox nicht aktiviert)
+Lösung: ☑ "Mit Root (pkexec)" aktivieren
+Resultat: Image wird gemountet und gescannt!
+
+🔥 WICHTIG:
+   Für deine 238 GB .img Datei MUSS die Root-Checkbox
+   aktiviert sein, sonst funktioniert NICHTS!
+
+═══════════════════════════════════════════════════════════
